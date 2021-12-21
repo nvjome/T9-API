@@ -44,6 +44,9 @@ AudioAmplifier              preGain;
 AudioAmplifier              postGain;
 AudioOutputI2S              lineOut;
 
+//Codec
+AudioControlSGTL5000        sgtl5000;
+
 
 ///////////////////////////////////////
 // Audio Cords
@@ -64,8 +67,11 @@ AudioConnection             postGainToLineOut_c;
 // Effect switching functions
 ///////////////////////////////////////
 
-void T9PB_begin();
-void disconnectAllCords();
+void T9PB_begin(int memory);
+void T9PB_disconnectAllCords();
+void T9PB_hp_volume(float volume) {
+    sgtl5000.volume(volume);
+}
 
 // Effect 1: 
 void T9PB_connect_effect_1();
