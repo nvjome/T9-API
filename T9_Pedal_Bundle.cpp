@@ -22,3 +22,18 @@ void T9PB_begin(int memory) {
     AudioMemory(memory);
 }
 
+///////////////////////////////////////
+// Effect switching functions
+// Functions accept void arguments and return void.
+///////////////////////////////////////
+
+// Effect 1: Low Pass Filter
+void T9PB_connect_effect_01(void) {
+    effect01Input.connect();
+    effect01Output.connect();
+}
+
+void T9BP_disconnect_effect_01(void) {
+    effect01Input.disconnect();
+    effect01Output.disconnect();
+}
