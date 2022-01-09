@@ -8,10 +8,12 @@
 
 /*
     T9PB_begin
-    Initializes the Teensy Audio library and settings
+    Initializes the Teensy Audio library and settings.
+    Arguments
+        memory: number of audio blocks to allocate for Teensy Audio library
 */
 void T9PB_begin(int memory) {
-    T9PB_disconnect_all_cords();
+    T9PB_disconnect_all_effects();
 
     sgtl5000.enable();
     sgtl5000.inputSelect(AUDIO_INPUT_LINEIN);
@@ -36,4 +38,19 @@ void T9PB_connect_effect_01(void) {
 void T9BP_disconnect_effect_01(void) {
     effect01Input.disconnect();
     effect01Output.disconnect();
+}
+
+
+/*
+    T9PB_disconnect_all_effects
+    Disconnects all effects.
+
+    TODO: May change to just iterating through an array of
+    pointers to the AudioConnection objects that are the input
+    connections to each effect, may be better.
+*/
+void T9PB_disconnect_all_effects(void) {
+    for (int i = 0; i < NUM_EFFECTS, i++) {
+        (*T9PB_disconnectTable[i])();
+    }
 }

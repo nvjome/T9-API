@@ -67,7 +67,7 @@ AudioConnection             effect01Output(effect01LPF, 0, postGain, 0);
 
 
 void T9PB_begin(int memory);
-void T9PB_disconnect_all_cords(void);
+void T9PB_disconnect_all_effects(void);
 void T9PB_hp_volume(float volume) {
     sgtl5000.volume(volume);
 }
