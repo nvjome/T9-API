@@ -13,9 +13,6 @@
 #include <SD.h>
 #include <SerialFlash.h>
 
-// Effect includes
-#include "effect01LPF_functions.h"
-
 // Number of implemented effects
 #define NUM_EFFECTS 1
 
@@ -69,17 +66,29 @@ AudioConnection             effect01Input(preGain, 0, effect01LPF, 0);
 AudioConnection             effect01Output(effect01LPF, 0, postGain, 0);
 
 
-void T9PB_begin(int memory);
+void T9PB_begin(void);
 void T9PB_disconnect_all_effects(void);
 void T9PB_hp_volume(float volume) {
     sgtl5000.volume(volume);
 }
 
+
 ///////////////////////////////////////
 // Effect switching functions
 // Functions accept void arguments and return void.
 ///////////////////////////////////////
-// Moved to individual source files
+
+// Effect 1: Low Pass Filter
+void T9PB_connect_effect_01(void);
+void T9PB_disconnect_effect_01(void);
+
+
+///////////////////////////////////////
+// Effect parameter functions
+///////////////////////////////////////
+
+// Effect 1: Low Pass Filter
+void T9PB_frequency(float freq);
 
 
 ///////////////////////////////////////

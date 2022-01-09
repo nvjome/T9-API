@@ -9,10 +9,12 @@
 /*
     T9PB_begin
     Initializes the Teensy Audio library and settings.
-    Arguments
-        memory: number of audio blocks to allocate for Teensy Audio library
+
+    NOTE: memory argument removed due to compilation error, apparently
+    the argument for the AudioMemory macro needs to be a constant
+    at compile time.
 */
-void T9PB_begin(int memory) {
+void T9PB_begin(void) {
     T9PB_disconnect_all_effects();
 
     sgtl5000.enable();
@@ -21,14 +23,26 @@ void T9PB_begin(int memory) {
     //sgtl5000.lineOutLevel(13);  // max output level
     sgtl5000.volume(0.3);
 
-    AudioMemory(memory);
+    //AudioMemory(memory);
 }
 
 ///////////////////////////////////////
 // Effect switching functions
 // Functions accept void arguments and return void.
 ///////////////////////////////////////
-// Moved to individual source files.
+
+// Effect 1: Low Pass Filter
+void T9PB_connect_effect_01(void) {
+    effect01Input.connect();
+    effect01Output.connect();
+}
+
+void T9PB_disconnect_effect_01(void) {
+    effect01Input.disconnect();
+    effect01Output.disconnect();
+}
+
+// Effect 2: 
 
 
 /*
