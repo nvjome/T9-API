@@ -31,7 +31,7 @@ AudioInputI2S               lineIn;
 AudioAmplifier              preGain;
 
 // Effect 1: Low Pass Filter
-AudioFilterStateVariable    effect1LPF;
+AudioFilterStateVariable    effect01LPF;
 
 // Effect 2: 
 
