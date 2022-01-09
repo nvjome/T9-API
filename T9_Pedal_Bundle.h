@@ -65,7 +65,7 @@ AudioConnection             lineInToPreGain_c(lineIn, 0, preGain, 0);
 AudioConnection             postGainToLineOut_c(postGain, 0, lineOut, 0);
 
 // Effect 1: Low Pass Filter
-AudioConnection             effect01Input(preGain, 0, effect01LFP, 0);
+AudioConnection             effect01Input(preGain, 0, effect01LPF, 0);
 AudioConnection             effect01Output(effect01LPF, 0, postGain, 0);
 
 
@@ -89,7 +89,7 @@ void (*T9PB_connectTable[NUM_EFFECTS])(void) = {
     T9PB_connect_effect_01
 };
 
-void (T9PB_disconnectTable[NUM_EFFECTS])(void) = {
+void (*T9PB_disconnectTable[NUM_EFFECTS])(void) = {
     T9PB_connect_effect_01
 };
 
