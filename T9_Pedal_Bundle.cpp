@@ -40,7 +40,7 @@ void T9PB_begin(int memory) {
     and output connections to each effect.
 */
 void T9PB_disconnect_all_effects(void) {
-    for (int i = 0; i < NUM_EFFECTS, i++) {
+    for (int i = 0; i < NUM_EFFECTS; i++) {
         (*T9PB_disconnectTable[i])();
     }
 }
