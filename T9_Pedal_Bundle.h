@@ -13,6 +13,9 @@
 #include <SD.h>
 #include <SerialFlash.h>
 
+// Effect includes
+#include "effect01LPF_functions.h"
+
 // Number of implemented effects
 #define NUM_EFFECTS 1
 
@@ -76,13 +79,7 @@ void T9PB_hp_volume(float volume) {
 // Effect switching functions
 // Functions accept void arguments and return void.
 ///////////////////////////////////////
-
-// Effect 1: Low Pass Filter
-void T9PB_connect_effect_01(void);
-void T9BP_disconnect_effect_01(void);
-// void T9BP_switch_effect_1(void);
-
-// Effect 2: 
+// Moved to individual source files
 
 
 ///////////////////////////////////////
