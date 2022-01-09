@@ -15,3 +15,7 @@ void T9PB_disconnect_effect_01(void) {
     effect01Input.disconnect();
     effect01Output.disconnect();
 }
+
+void T9PB_frequency(float freq) {
+    effect01LPF.frequency(freq);
+}
