@@ -35,7 +35,7 @@ AudioControlSGTL5000        sgtl5000;
 
 
 ///////////////////////////////////////
-// Audio Cords
+// Audio Connections
 // ALL possible connections between objects.
 // Use format for effects:  effectXXInput
 //                          effectXXOutput
@@ -59,7 +59,7 @@ AudioConnection             effect01Output(effect01LPF, 0, postGain, 0);
     T9PB_begin
     Initializes the Teensy Audio library and settings.
 
-    NOTE: memory argument removed due to compilation error, apparently
+    NOTE: memory argument removed due to compilation error,
     the argument for the AudioMemory macro needs to be a constant
     at compile time.
 */
