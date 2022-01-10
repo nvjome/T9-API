@@ -104,7 +104,7 @@ void T9PB_begin(void) {
 */
 void T9PB_disconnect_all_effects(void) {
     for (int i = 0; i <= NUM_EFFECTS; i++) {
-        //(*T9PB_disconnectTable[i])();
+        (*effectObjects_a[i]).disconnect();
     }
 }
 
@@ -171,3 +171,29 @@ EffectObject effect00Bypass_o(
     nullFunc, nullFunc, nullFunc
 );
 
+// Effect 1: Low Pass Filter
+EffectObject effect01LPF_o(
+    "LPF", "Frequency", "NA", "NA",
+    &effect01Input,
+    &effect01Output,
+    T9PB_effect01_frequency, nullFunc, nullFunc
+);
+
+// Effect 2: Freeverb
+EffectObject effect02Freeverb_o(
+    "Freeverb", "Roomsize", "Damping", "NA",
+    &effect02Input,
+    &effect02Output,
+    T9PB_effect02_roomsize, T9PB_effect02_damping, nullFunc
+);
+
+
+///////////////////////////////////////
+// Effect object pointer array
+///////////////////////////////////////
+
+EffectObject* effectObjects_a[NUM_EFFECTS+1] = {
+    &effect00Bypass_o,
+    &effect01LPF_o,
+    &effect02Freeverb_o
+};

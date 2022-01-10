@@ -12,10 +12,10 @@
 class EffectObject {
 public:
     EffectObject(
-        char eName[16],
-        char p1Name[10],
-        char p2Name[10],
-        char p3Name[10],
+        const std::string& eName,
+        const std::string& p1Name,
+        const std::string& p2Name,
+        const std::string& p3Name,
         AudioConnection* iConn_p,
         AudioConnection* oConn_p,
         void (*modP1_fp)(float),
@@ -29,12 +29,14 @@ public:
     void connect(void);
     void disconnect(void);
 
+    std::string getEffectName(void);
+
 private:
     // basic info
-    char effectName[16];
-    char param1Name[10];
-    char param2Name[10];
-    char param3Name[10];
+    std::string effectName;
+    std::string param3Name;
+    std::string param1Name;
+    std::string param2Name;
 
     // connection object pointers
     AudioConnection* inputConn_p;
