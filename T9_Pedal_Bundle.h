@@ -36,7 +36,7 @@ void T9PB_disconnect_effect_01(void);
 ///////////////////////////////////////
 
 // Effect 1: Low Pass Filter
-//void T9PB_frequency(float freq);
+void T9PB_frequency(float freq);
 
 
 ///////////////////////////////////////
