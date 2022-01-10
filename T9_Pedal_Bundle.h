@@ -25,26 +25,12 @@ float T9PB_peak_detect(int source);
 
 
 ///////////////////////////////////////
-// Effect switching functions
-// Functions accept void arguments and return void.
-///////////////////////////////////////
-
-// Effect 0: Bypass
-void T9PB_connect_effect_00(void);
-void T9PB_disconnect_effect_00(void);
-
-// Effect 1: Low Pass Filter
-void T9PB_connect_effect_01(void);
-void T9PB_disconnect_effect_01(void);
-
-// Effect 2: Freeverb
-void T9PB_connect_effect_02(void);
-void T9PB_disconnect_effect_02(void);
-
-
-///////////////////////////////////////
 // Effect parameter functions
 ///////////////////////////////////////
+
+// Null function, used for empty parameters
+// Would ideally be optimized away, but not sure.
+void nullFunc(float n);
 
 // Effect 1: Low Pass Filter
 void T9PB_effect01_frequency(float freq);
@@ -52,13 +38,5 @@ void T9PB_effect01_frequency(float freq);
 // Effect 2: Freeverb
 void T9PB_effect02_roomsize(float size);
 void T9PB_effect02_damping(float damp);
-
-
-///////////////////////////////////////
-// Effect (dis)connect tables
-///////////////////////////////////////
-extern void (*T9PB_connectTable[NUM_EFFECTS+1])(void);
-
-extern void (*T9PB_disconnectTable[NUM_EFFECTS+1])(void);
 
 #endif

@@ -5,6 +5,7 @@
 
 #include <Arduino.h>
 #include "T9_Pedal_Bundle.h"
+#include "effect_object.h"
 
 ///////////////////////////////////////
 // Audio Objects
@@ -103,7 +104,7 @@ void T9PB_begin(void) {
 */
 void T9PB_disconnect_all_effects(void) {
     for (int i = 0; i <= NUM_EFFECTS; i++) {
-        (*T9PB_disconnectTable[i])();
+        //(*T9PB_disconnectTable[i])();
     }
 }
 
@@ -136,47 +137,12 @@ float T9PB_peak_detect(int source) {
 
 
 ///////////////////////////////////////
-// Effect switching functions
-// Functions accept void arguments and return void.
-///////////////////////////////////////
-
-// Effect 0: Bypass
-void T9PB_connect_effect_00(void) {
-    effect00Input.connect();
-    effect00Output.connect();
-}
-
-void T9PB_disconnect_effect_00(void) {
-    effect00Input.disconnect();
-    effect00Output.disconnect();
-}
-
-// Effect 1: Low Pass Filter
-void T9PB_connect_effect_01(void) {
-    effect01Input.connect();
-    effect01Output.connect();
-}
-
-void T9PB_disconnect_effect_01(void) {
-    effect01Input.disconnect();
-    effect01Output.disconnect();
-}
-
-// Effect 2: Freeverb
-void T9PB_connect_effect_02(void) {
-    effect02Input.connect();
-    effect02Output.connect();
-}
-
-void T9PB_disconnect_effect_02(void) {
-    effect02Input.disconnect();
-    effect02Output.disconnect();
-}
-
-
-///////////////////////////////////////
 // Effect parameter functions
 ///////////////////////////////////////
+
+// Null function, used for empty parameters
+// Would ideally be optimized away, but not sure.
+void nullFunc(float n) {}
 
 // Effect 1: Low Pass Filter
 void T9PB_effect01_frequency(float freq) {
@@ -194,19 +160,14 @@ void T9PB_effect02_damping(float damp) {
 
 
 ///////////////////////////////////////
-// Effect (dis)connect tables
+// Effect objects
 ///////////////////////////////////////
 
-void (*T9PB_connectTable[NUM_EFFECTS+1])(void) = {
-    T9PB_connect_effect_00,
-    T9PB_connect_effect_01,
-    T9PB_connect_effect_02
-};
-
-void (*T9PB_disconnectTable[NUM_EFFECTS+1])(void) = {
-    T9PB_disconnect_effect_00,
-    T9PB_disconnect_effect_01,
-    T9PB_disconnect_effect_02
-};
-
+// Effect 0: Bypass
+EffectObject effect00Bypass_o(
+    "Bypass", "NA", "NA", "NA",
+    &effect00Input,
+    &effect00Output,
+    nullFunc, nullFunc, nullFunc
+);
 

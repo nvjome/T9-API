@@ -3,7 +3,7 @@
 */
 
 #include "effect_object.h"
-#include <cstring>
+#include <string>
 
 EffectObject::EffectObject(
     char eName[16],

@@ -2,8 +2,12 @@
     Nolan Jome
 */
 
+#ifndef effect_object_h_
+#define effect_object_h_
+
 #include <Arduino.h>
 #include <Audio.h>
+#include <string>
 
 class EffectObject {
 public:
@@ -42,3 +46,5 @@ private:
     void (*modParameter3_fp)(float);
 
 };
+
+#endif
