@@ -23,8 +23,8 @@ AudioEffectPassthrough      effect00Bypass;
 // Effect 1: Low Pass Filter
 AudioFilterStateVariable    effect01LPF;
 
-// Effect 2: 
-
+// Effect 2: Freeverb
+AudioEffectFreeverb         effect02Freeverb;
 
 // Effect 3: 
 
@@ -67,6 +67,10 @@ AudioConnection             effect00Output(effect00Bypass, 0, postGain, 0);
 // Effect 1: Low Pass Filter
 AudioConnection             effect01Input(preGain, 0, effect01LPF, 0);
 AudioConnection             effect01Output(effect01LPF, 0, postGain, 0);
+
+// Effect 2: Freeverb
+AudioConnection             effect02Input(preGain, 0, effect02Freeverb, 0);
+AudioConnection             effect02Output(effect02Freeverb, 0, postGain, 0);
 
 
 /*
@@ -158,8 +162,16 @@ void T9PB_disconnect_effect_01(void) {
     effect01Output.disconnect();
 }
 
-// Effect 2: 
+// Effect 2: Freeverb
+void T9PB_connect_effect_02(void) {
+    effect02Input.connect();
+    effect02Output.connect();
+}
 
+void T9PB_disconnect_effect_02(void) {
+    effect02Input.disconnect();
+    effect02Output.disconnect();
+}
 
 
 ///////////////////////////////////////
@@ -167,8 +179,17 @@ void T9PB_disconnect_effect_01(void) {
 ///////////////////////////////////////
 
 // Effect 1: Low Pass Filter
-void T9PB_frequency(float freq) {
+void T9PB_effect01_frequency(float freq) {
     effect01LPF.frequency(freq);
+}
+
+// Effect 2: Freeverb
+void T9PB_effect02_roomsize(float size) {
+    effect02Freeverb.roomsize(size);
+}
+
+void T9PB_effect02_damping(float damp) {
+    effect02Freeverb.damping(damp);
 }
 
 
@@ -178,12 +199,14 @@ void T9PB_frequency(float freq) {
 
 void (*T9PB_connectTable[NUM_EFFECTS+1])(void) = {
     T9PB_connect_effect_00,
-    T9PB_connect_effect_01
+    T9PB_connect_effect_01,
+    T9PB_connect_effect_02
 };
 
 void (*T9PB_disconnectTable[NUM_EFFECTS+1])(void) = {
     T9PB_disconnect_effect_00,
-    T9PB_disconnect_effect_01
+    T9PB_disconnect_effect_01,
+    T9PB_disconnect_effect_02
 };
 
 

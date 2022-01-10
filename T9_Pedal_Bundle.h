@@ -16,7 +16,7 @@
 #include "effect_passthrough.h"
 
 // Number of implemented effects, excluding bypass effect 0
-#define NUM_EFFECTS 1
+#define NUM_EFFECTS 2
 
 void T9PB_begin(void);
 void T9PB_disconnect_all_effects(void);
@@ -37,13 +37,21 @@ void T9PB_disconnect_effect_00(void);
 void T9PB_connect_effect_01(void);
 void T9PB_disconnect_effect_01(void);
 
+// Effect 2: Freeverb
+void T9PB_connect_effect_02(void);
+void T9PB_disconnect_effect_02(void);
+
 
 ///////////////////////////////////////
 // Effect parameter functions
 ///////////////////////////////////////
 
 // Effect 1: Low Pass Filter
-void T9PB_frequency(float freq);
+void T9PB_effect01_frequency(float freq);
+
+// Effect 2: Freeverb
+void T9PB_effect02_roomsize(float size);
+void T9PB_effect02_damping(float damp);
 
 
 ///////////////////////////////////////
