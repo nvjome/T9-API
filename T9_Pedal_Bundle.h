@@ -6,7 +6,7 @@
 #ifndef t9_pedal_bundle_h_
 #define t9_pedal_bundle_h_
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include <Audio.h>
 #include <Wire.h>
 #include <SPI.h>
