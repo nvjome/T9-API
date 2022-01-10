@@ -15,7 +15,7 @@
 
 #include "effect_passthrough.h"
 
-// Number of implemented effects
+// Number of implemented effects, excluding bypass effect 0
 #define NUM_EFFECTS 1
 
 void T9PB_begin(void);
@@ -49,8 +49,8 @@ void T9PB_frequency(float freq);
 ///////////////////////////////////////
 // Effect (dis)connect tables
 ///////////////////////////////////////
-extern void (*T9PB_connectTable[NUM_EFFECTS])(void);
+extern void (*T9PB_connectTable[NUM_EFFECTS+1])(void);
 
-extern void (*T9PB_disconnectTable[NUM_EFFECTS])(void);
+extern void (*T9PB_disconnectTable[NUM_EFFECTS+1])(void);
 
 #endif

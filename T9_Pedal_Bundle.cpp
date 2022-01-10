@@ -98,7 +98,7 @@ void T9PB_begin(void) {
     and output connections to each effect.
 */
 void T9PB_disconnect_all_effects(void) {
-    for (int i = 0; i < NUM_EFFECTS; i++) {
+    for (int i = 0; i <= NUM_EFFECTS; i++) {
         (*T9PB_disconnectTable[i])();
     }
 }
@@ -176,12 +176,14 @@ void T9PB_frequency(float freq) {
 // Effect (dis)connect tables
 ///////////////////////////////////////
 
-void (*T9PB_connectTable[NUM_EFFECTS])(void) = {
+void (*T9PB_connectTable[NUM_EFFECTS+1])(void) = {
+    T9PB_connect_effect_00,
     T9PB_connect_effect_01
 };
 
-void (*T9PB_disconnectTable[NUM_EFFECTS])(void) = {
-    T9PB_connect_effect_01
+void (*T9PB_disconnectTable[NUM_EFFECTS+1])(void) = {
+    T9PB_disconnect_effect_00,
+    T9PB_disconnect_effect_01
 };
 
 
