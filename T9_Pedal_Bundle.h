@@ -13,6 +13,8 @@
 #include <SD.h>
 #include <SerialFlash.h>
 
+#include "effect_passthrough.h"
+
 // Number of implemented effects
 #define NUM_EFFECTS 1
 
@@ -26,6 +28,10 @@ float T9PB_peak_detect(int source);
 // Effect switching functions
 // Functions accept void arguments and return void.
 ///////////////////////////////////////
+
+// Effect 0: Bypass
+void T9PB_connect_effect_00(void);
+void T9PB_disconnect_effect_00(void);
 
 // Effect 1: Low Pass Filter
 void T9PB_connect_effect_01(void);

@@ -17,6 +17,9 @@
 AudioInputI2S               lineIn;
 AudioAmplifier              preGain;
 
+// Effect 0: Bypass
+AudioEffectPassthrough      effect00Bypass;
+
 // Effect 1: Low Pass Filter
 AudioFilterStateVariable    effect01LPF;
 
@@ -56,6 +59,10 @@ AudioConnection             lineInToPreGain_c(lineIn, 0, preGain, 0);
 AudioConnection             postGainToLineOut_c(postGain, 0, lineOut, 0);
 AudioConnection             lineInToPeak_c(lineIn, 0, lineInPeak, 0);
 AudioConnection             postGainToPeak_c(postGain, 0, lineOutPeak, 0);
+
+// Effect 0: Bypass
+AudioConnection             effect00Input(preGain, 0, effect00Bypass, 0);
+AudioConnection             effect00Output(effect00Bypass, 0, postGain, 0);
 
 // Effect 1: Low Pass Filter
 AudioConnection             effect01Input(preGain, 0, effect01LPF, 0);
@@ -128,6 +135,17 @@ float T9PB_peak_detect(int source) {
 // Effect switching functions
 // Functions accept void arguments and return void.
 ///////////////////////////////////////
+
+// Effect 0: Bypass
+void T9PB_connect_effect_00(void) {
+    effect00Input.connect();
+    effect00Output.connect();
+}
+
+void T9PB_disconnect_effect_00(void) {
+    effect00Input.disconnect();
+    effect00Output.disconnect();
+}
 
 // Effect 1: Low Pass Filter
 void T9PB_connect_effect_01(void) {
