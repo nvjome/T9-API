@@ -171,6 +171,12 @@ void T9PB_effect02_damping(float damp) {
 
 ///////////////////////////////////////
 // Effect objects
+// Each EffectClass object needs the following:
+//      Effect name
+//      Parameter name(s)
+//      Input connection object pointer
+//      Output connection object pointer
+//      Parameter change function pointers
 ///////////////////////////////////////
 
 // Effect 0: Bypass
