@@ -109,16 +109,18 @@ void T9PB_hp_volume(float volume) {
         The greatest sample value since the last check, 0.0 to 1.0 float.
 */
 float T9PB_peak_detect(int source) {
-    int16_t return;
+    float ret = 0.0;
     if (source == 0) {
         if (lineInPeak.available()) {
-            return lineInPeak.read();
+            ret = lineInPeak.read();
         }
-    } else {
+    } else if (source == 1) {
         if (lineOutPeak.available()) {
-            return lineOutPeak.read();
+            ret = lineOutPeak.read();
         }
     }
+
+    return ret;
 }
 
 
