@@ -34,6 +34,11 @@ AudioOutputI2S              lineOut;
 AudioControlSGTL5000        sgtl5000;
 
 
+// Peak detection blocks
+AudioAnalyzePeak            lineInPeak;
+AudioAnalyzePeak            lineOutPeak;
+
+
 ///////////////////////////////////////
 // Audio Connections
 // ALL possible connections between objects.
@@ -49,6 +54,8 @@ AudioControlSGTL5000        sgtl5000;
 
 AudioConnection             lineInToPreGain_c(lineIn, 0, preGain, 0);
 AudioConnection             postGainToLineOut_c(postGain, 0, lineOut, 0);
+AudioConnection             lineInToPeak_c(lineIn, 0, lineInPeak, 0);
+AudioConnection             postGainToPeak_c(postGain, 0, lineOutPeak, 0);
 
 // Effect 1: Low Pass Filter
 AudioConnection             effect01Input(preGain, 0, effect01LPF, 0);
@@ -91,6 +98,27 @@ void T9PB_disconnect_all_effects(void) {
 
 void T9PB_hp_volume(float volume) {
     sgtl5000.volume(volume);
+}
+
+/*
+    T9PB_peak_detect
+    Checks for peaks at the input or output.
+    Arguments:
+        source: Where to check for peak, 0 checks input, 1 checks output.
+    Returns:
+        The greatest sample value since the last check, 0.0 to 1.0 float.
+*/
+float T9PB_peak_detect(int source) {
+    int16_t return;
+    if (source == 0) {
+        if (lineInPeak.available()) {
+            return lineInPeak.read();
+        }
+    } else {
+        if (lineOutPeak.available()) {
+            return lineOutPeak.read();
+        }
+    }
 }
 
 
