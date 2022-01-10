@@ -60,3 +60,12 @@ void EffectObject::disconnect(void) {
 std::string EffectObject::getEffectName(void) {
     return effectName;
 }
+
+std::string EffectObject::getParameterName(int n) {
+    if (n == 1)
+        return param1Name;
+    else if (n == 2)
+        return param2Name;
+    else if (n == 3)
+        return param3Name;
+}

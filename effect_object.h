@@ -30,13 +30,14 @@ public:
     void disconnect(void);
 
     std::string getEffectName(void);
+    std::string getParameterName(int n);
 
 private:
     // basic info
     std::string effectName;
-    std::string param3Name;
     std::string param1Name;
     std::string param2Name;
+    std::string param3Name;
 
     // connection object pointers
     AudioConnection* inputConn_p;
