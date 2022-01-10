@@ -131,13 +131,13 @@ float T9PB_peak_detect(int source) {
 
 // Effect 1: Low Pass Filter
 void T9PB_connect_effect_01(void) {
-    //effect01Input.connect();
-    //effect01Output.connect();
+    effect01Input.connect();
+    effect01Output.connect();
 }
 
 void T9PB_disconnect_effect_01(void) {
-    //effect01Input.disconnect();
-    //effect01Output.disconnect();
+    effect01Input.disconnect();
+    effect01Output.disconnect();
 }
 
 // Effect 2: 
