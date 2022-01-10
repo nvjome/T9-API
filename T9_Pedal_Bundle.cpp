@@ -1,6 +1,16 @@
 /*
     Nolan Jome
 
+    Contains all function and global variable definitions.
+    Also creates the EffectClass objects for each effect,
+    and the EffectClass object pointer array.
+
+    Procedure to add an effect:
+        Add the Teensy Audio objects definitions.
+        Add the Teensy Audio connection definitions.
+        Add parameter change functions for each effect parameter.
+        Create EffectClass object.
+        Append new EffectClass object to pointer array.
 */
 
 #include <Arduino.h>

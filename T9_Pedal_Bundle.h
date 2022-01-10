@@ -1,6 +1,11 @@
 /*
     Nolan Jome
 
+    Contains all the function and global variable declarations.
+
+    Procedure to add an effect:
+        Add declarations for the parameter change functions.
+        Modify the NUM_EFFECTS define statement.
 */
 
 #ifndef t9_pedal_bundle_h_
