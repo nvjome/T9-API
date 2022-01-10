@@ -5,7 +5,7 @@
 
 #include <Arduino.h>
 #include "T9_Pedal_Bundle.h"
-#include "effect_object.h"
+#include "effect_class.h"
 
 ///////////////////////////////////////
 // Audio Objects
@@ -164,7 +164,7 @@ void T9PB_effect02_damping(float damp) {
 ///////////////////////////////////////
 
 // Effect 0: Bypass
-EffectObject effect00Bypass_o(
+EffectClass effect00Bypass_o(
     "Bypass", "NA", "NA", "NA",
     &effect00Input,
     &effect00Output,
@@ -172,7 +172,7 @@ EffectObject effect00Bypass_o(
 );
 
 // Effect 1: Low Pass Filter
-EffectObject effect01LPF_o(
+EffectClass effect01LPF_o(
     "LPF", "Frequency", "NA", "NA",
     &effect01Input,
     &effect01Output,
@@ -180,7 +180,7 @@ EffectObject effect01LPF_o(
 );
 
 // Effect 2: Freeverb
-EffectObject effect02Freeverb_o(
+EffectClass effect02Freeverb_o(
     "Freeverb", "Roomsize", "Damping", "NA",
     &effect02Input,
     &effect02Output,
@@ -192,7 +192,7 @@ EffectObject effect02Freeverb_o(
 // Effect object pointer array
 ///////////////////////////////////////
 
-EffectObject* effectObjects_a[NUM_EFFECTS+1] = {
+EffectClass* effectObjects_a[NUM_EFFECTS+1] = {
     &effect00Bypass_o,
     &effect01LPF_o,
     &effect02Freeverb_o

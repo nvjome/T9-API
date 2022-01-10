@@ -2,10 +2,10 @@
     Nolan Jome
 */
 
-#include "effect_object.h"
+#include "effect_class.h"
 #include <string>
 
-EffectObject::EffectObject(
+EffectClass::EffectClass(
     const std::string& eName,
     const std::string& p1Name,
     const std::string& p2Name,
@@ -22,7 +22,7 @@ EffectObject::EffectObject(
     param2Name = p2Name;
     param3Name = p3Name;
 
-    // connection object pointers
+    // connection Class pointers
     inputConn_p = iConn_p;
     outputConn_p = oConn_p;
 
@@ -32,36 +32,36 @@ EffectObject::EffectObject(
     modParameter3_fp = modP3_fp;
 }
 
-void EffectObject::modParameter1(float param) {
+void EffectClass::modParameter1(float param) {
     // call function pointed to
     modParameter1_fp(param);
 }
 
-void EffectObject::modParameter2(float param) {
+void EffectClass::modParameter2(float param) {
     // call function pointed to
     modParameter2_fp(param);
 }
 
-void EffectObject::modParameter3(float param) {
+void EffectClass::modParameter3(float param) {
     // call function pointed to
     modParameter3_fp(param);
 }
 
-void EffectObject::connect(void) {
+void EffectClass::connect(void) {
     inputConn_p->connect();
     outputConn_p->connect();
 }
 
-void EffectObject::disconnect(void) {
+void EffectClass::disconnect(void) {
     inputConn_p->disconnect();
     outputConn_p->disconnect();
 }
 
-std::string EffectObject::getEffectName(void) {
+std::string EffectClass::getEffectName(void) {
     return effectName;
 }
 
-std::string EffectObject::getParameterName(int n) {
+std::string EffectClass::getParameterName(int n) {
     if (n == 1)
         return param1Name;
     else if (n == 2)

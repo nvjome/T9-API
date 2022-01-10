@@ -2,16 +2,16 @@
     Nolan Jome
 */
 
-#ifndef effect_object_h_
-#define effect_object_h_
+#ifndef effect_class_h_
+#define effect_class_h_
 
 #include <Arduino.h>
 #include <Audio.h>
 #include <string>
 
-class EffectObject {
+class EffectClass {
 public:
-    EffectObject(
+    EffectClass(
         const std::string& eName,
         const std::string& p1Name,
         const std::string& p2Name,

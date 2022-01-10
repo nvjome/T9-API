@@ -14,7 +14,7 @@
 #include <SerialFlash.h>
 
 #include "effect_passthrough.h"
-#include "effect_object.h"
+#include "effect_class.h"
 
 // Number of implemented effects, excluding bypass effect 0
 #define NUM_EFFECTS 2
@@ -45,6 +45,6 @@ void T9PB_effect02_damping(float damp);
 // Effect object pointer array
 ///////////////////////////////////////
 
-extern EffectObject* effectObjects_a[NUM_EFFECTS+1];
+extern EffectClass* effectObjects_a[NUM_EFFECTS+1];
 
 #endif
