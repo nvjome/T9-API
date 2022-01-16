@@ -25,7 +25,12 @@
 ///////////////////////////////////////
 
 // System input objects:
+#ifdef DEBUG_USB_INPUT
+AudioInputUSB               lineIn;
+#else
 AudioInputI2S               lineIn;
+#endif
+
 AudioAmplifier              preGain;
 
 // Effect 0: Bypass
@@ -44,13 +49,12 @@ AudioEffectFreeverb         effect02Freeverb;
 AudioAmplifier              postGain;
 AudioOutputI2S              lineOut;
 
-//Codec
-AudioControlSGTL5000        sgtl5000;
-
-
 // Peak detection blocks
 AudioAnalyzePeak            lineInPeak;
 AudioAnalyzePeak            lineOutPeak;
+
+//Codec
+AudioControlSGTL5000        sgtl5000;
 
 
 ///////////////////////////////////////
@@ -67,9 +71,11 @@ AudioAnalyzePeak            lineOutPeak;
 ///////////////////////////////////////
 
 AudioConnection             lineInToPreGain_c(lineIn, 0, preGain, 0);
+AudioConnection             lineInToPeakL_c(lineIn, 0, lineInPeak, 0);
+
 AudioConnection             postGainToLineOut_c(postGain, 0, lineOut, 0);
-AudioConnection             lineInToPeak_c(lineIn, 0, lineInPeak, 0);
-AudioConnection             postGainToPeak_c(postGain, 0, lineOutPeak, 0);
+AudioConnection             postGainToPeakL_c(postGain, 0, lineOutPeak, 0);
+AudioConnection             postGainToPeakR_c(postGain, 0, lineOutPeak, 1);
 
 // Effect 0: Bypass
 AudioConnection             effect00Input(preGain, 0, effect00Bypass, 0);
@@ -101,7 +107,8 @@ void T9PB_begin(void) {
     //sgtl5000.lineOutLevel(13);  // max output level
     sgtl5000.volume(0.3);
 
-    //AudioMemory(memory);
+    preGain.gain(1.0);
+    postGain.gain(1.0);
 }
 
 /*
