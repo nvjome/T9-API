@@ -68,4 +68,6 @@ std::string EffectClass::getParameterName(int n) {
         return param2Name;
     else if (n == 3)
         return param3Name;
+    else
+        return "ERR";
 }
