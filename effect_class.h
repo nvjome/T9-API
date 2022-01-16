@@ -47,7 +47,6 @@ private:
     void (*modParameter1_fp)(float);
     void (*modParameter2_fp)(float);
     void (*modParameter3_fp)(float);
-
 };
 
 #endif
