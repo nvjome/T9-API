@@ -44,6 +44,7 @@ void T9PB_effect01_frequency(float freq);
 // Effect 2: Freeverb
 void T9PB_effect02_roomsize(float size);
 void T9PB_effect02_damping(float damp);
+void T9PB_effect02_wetdry(float wet);
 
 
 ///////////////////////////////////////

@@ -37,7 +37,9 @@ AudioEffectPassthrough      effect00Bypass;
 AudioFilterStateVariable    effect01LPF;
 
 // Effect 2: Freeverb
+AudioEffectPassthrough      effect02Buffer;
 AudioEffectFreeverb         effect02Freeverb;
+AudioMixer4                 effect02Mixer;
 
 // Effect 3: 
 
@@ -87,8 +89,11 @@ AudioConnection             effect01Input(preGain, 0, effect01LPF, 0);
 AudioConnection             effect01Output(effect01LPF, 0, postGain, 0);
 
 // Effect 2: Freeverb
-AudioConnection             effect02Input(preGain, 0, effect02Freeverb, 0);
-AudioConnection             effect02Output(effect02Freeverb, 0, postGain, 0);
+AudioConnection             effect02Input(preGain, 0, effect02Buffer, 0);
+AudioConnection             effect02Sub01(effect02Buffer, 0, effect02Mixer, 0);
+AudioConnection             effect02Sub02(effect02Buffer, 0, effect02Freeverb, 0);
+AudioConnection             effect02Sub03(effect02Freeverb, 0, effect02Mixer, 1);
+AudioConnection             effect02Output(effect02Mixer, 0, postGain, 0);
 
 
 /*
@@ -176,6 +181,14 @@ void T9PB_effect02_damping(float damp) {
     effect02Freeverb.damping(damp);
 }
 
+void T9PB_effect02_wetdry(float wet) {
+    if (wet > 1.0 || wet < 0.0) return;
+    // "dry" gain
+    effect02Mixer.gain(0,wet-1.0);
+    // "wet" gain
+    effect02Mixer.gain(1,wet);
+}
+
 
 ///////////////////////////////////////
 // Effect objects
@@ -205,10 +218,10 @@ EffectClass effect01LPF_o(
 
 // Effect 2: Freeverb
 EffectClass effect02Freeverb_o(
-    "Freeverb", "Roomsize", "Damping", "NA",
+    "Freeverb", "Roomsize", "Damping", "Wet/Dry",
     &effect02Input,
     &effect02Output,
-    T9PB_effect02_roomsize, T9PB_effect02_damping, nullFunc
+    T9PB_effect02_roomsize, T9PB_effect02_damping, T9PB_effect02_wetdry
 );
 
 
