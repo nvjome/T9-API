@@ -25,11 +25,8 @@
 ///////////////////////////////////////
 
 // System input objects:
-#ifdef DEBUG_USB_INPUT
-AudioInputUSB               lineIn;
-#else
+//AudioInputUSB               lineIn;
 AudioInputI2S               lineIn;
-#endif
 
 AudioAmplifier              preGain;
 
@@ -70,12 +67,16 @@ AudioControlSGTL5000        sgtl5000;
 // Use sensical fomat for other constant connections with postfix _c.
 ///////////////////////////////////////
 
+// Pre-effect connections
+
 AudioConnection             lineInToPreGain_c(lineIn, 0, preGain, 0);
 AudioConnection             lineInToPeakL_c(lineIn, 0, lineInPeak, 0);
 
-AudioConnection             postGainToLineOut_c(postGain, 0, lineOut, 0);
-AudioConnection             postGainToPeakL_c(postGain, 0, lineOutPeak, 0);
-AudioConnection             postGainToPeakR_c(postGain, 0, lineOutPeak, 1);
+// Post-effect connections
+
+AudioConnection             postGainToLineOutL_c(postGain, 0, lineOut, 0);
+AudioConnection             postGainToLineOutR_c(postGain, 0, lineOut, 1);
+AudioConnection             postGainToPeak_c(postGain, 0, lineOutPeak, 0);
 
 // Effect 0: Bypass
 AudioConnection             effect00Input(preGain, 0, effect00Bypass, 0);
