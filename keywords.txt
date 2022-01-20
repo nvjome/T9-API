@@ -7,6 +7,7 @@ EffectClass	KEYWORD1
 T9PB_begin	KEYWORD2
 T9PB_disconnect_all_effects	KEYWORD2
 T9PB_hp_volume	KEYWORD2
+T9PB_peak_detect	KEYWORD2
 ## EffectClass methods
 getEffectName	KEYWORD2
 getParameterName	KEYWORD2
