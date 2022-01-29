@@ -30,7 +30,7 @@ AudioInputI2S               lineIn;
 
 AudioAmplifier              preGain;
 
-AudioOneToTenSwitch         inputSwitch;
+AudioSwitch1To11            inputSwitch;
 
 // Effect 0: Bypass
 AudioEffectPassthrough      effect00Bypass;
@@ -49,7 +49,7 @@ AudioMixer4                 effect02Mixer;
 // System output objects:
 AudioAmplifier              postGain;
 
-AudioTenToOneMux            outputMux;
+AudioMux11To1               outputMux;
 
 AudioOutputI2S              lineOut;
 
@@ -112,7 +112,8 @@ AudioConnection             effect02Output(effect02Mixer, 0, outputMux, 2);
     at compile time.
 */
 void T9PB_begin(void) {
-    T9PB_disconnect_all_effects();
+    // default software passthrough
+    T9PB_change_effect(0, 0);
 
     sgtl5000.enable();
     sgtl5000.inputSelect(AUDIO_INPUT_LINEIN);
@@ -122,20 +123,6 @@ void T9PB_begin(void) {
 
     preGain.gain(1.0);
     postGain.gain(1.0);
-}
-
-/*
-    T9PB_disconnect_all_effects
-    Disconnects all effects.
-
-    TODO: May change to just iterating through an array of
-    pointers to the AudioConnection objects that are the input
-    and output connections to each effect.
-*/
-void T9PB_disconnect_all_effects(void) {
-    for (int i = 0; i <= NUM_EFFECTS; i++) {
-        //(*effectObjects_a[i]).disconnect();
-    }
 }
 
 void T9PB_hp_volume(float volume) {
@@ -161,7 +148,6 @@ float T9PB_peak_detect(int source) {
             ret = lineOutPeak.read();
         }
     }
-
     return ret;
 }
 

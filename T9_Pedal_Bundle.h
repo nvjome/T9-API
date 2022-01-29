@@ -19,8 +19,8 @@
 #include <SerialFlash.h>
 
 #include "effect_passthrough.h"
-#include "one_to_ten_switch.h"
-#include "ten_to_one_mux.h"
+#include "switch_1_to_11.h"
+#include "mux_11_to_1.h"
 #include "effect_class.h"
 
 // Number of implemented effects, excluding bypass effect 0
