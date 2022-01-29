@@ -47,6 +47,22 @@ void EffectClass::modParameter3(float param) {
     modParameter3_fp(param);
 }
 
+void EffectClass::modParameterN(int sel, float param) {
+    switch (sel) {
+    case 1:
+        modParameter1(param);
+        break;
+    case 2:
+        modParameter2(apram);
+        break;
+    case 3:
+        modParameter3(param);
+        break;
+    default:
+        ;
+    }
+}
+
 void EffectClass::runOnStart(void) {
     // call function pointed to
     runOnStart_fp();
