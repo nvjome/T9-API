@@ -113,7 +113,8 @@ AudioConnection             effect02Output(effect02Mixer, 0, outputMux, 2);
 */
 void T9PB_begin(void) {
     // default software passthrough
-    T9PB_change_effect(0, 0);
+    inputSwitch.outputSelect(0);
+    outputMux.inputSelect(0);
 
     sgtl5000.enable();
     sgtl5000.inputSelect(AUDIO_INPUT_LINEIN);
@@ -163,10 +164,14 @@ float T9PB_peak_detect(int source) {
 int T9PB_change_effect(int curEffect, int newEffect) {
     int ret = -1;
     if (newEffect >= 0 && newEffect <= NUM_EFFECTS) {
+        // run on stop function
+        effectObjects_a[curEffect]->runOnStop();
         // switch output
         outputMux.inputSelect(newEffect);
         // switch input
         inputSwitch.outputSelect(newEffect);
+        // run on start function
+        effectObjects_a[newEffect]->runOnStart();
         ret = newEffect;
     }
     return ret;
