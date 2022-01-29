@@ -1,10 +1,21 @@
 /*
     Nolan Jome
 
+    Contains all function and global variable definitions.
+    Also creates the EffectClass objects for each effect,
+    and the EffectClass object pointer array.
+
+    Procedure to add an effect:
+        Add the Teensy Audio objects definitions.
+        Add the Teensy Audio connection definitions.
+        Add parameter change functions for each effect parameter.
+        Create EffectClass object.
+        Append new EffectClass object to pointer array.
 */
 
-#include "Arduino.h"
+#include <Arduino.h>
 #include "T9_Pedal_Bundle.h"
+#include "effect_class.h"
 
 ///////////////////////////////////////
 // Audio Objects
@@ -14,7 +25,9 @@
 ///////////////////////////////////////
 
 // System input objects:
+//AudioInputUSB               lineIn;
 AudioInputI2S               lineIn;
+
 AudioAmplifier              preGain;
 
 // Effect 0: Bypass
@@ -24,7 +37,9 @@ AudioEffectPassthrough      effect00Bypass;
 AudioFilterStateVariable    effect01LPF;
 
 // Effect 2: Freeverb
+AudioEffectPassthrough      effect02Buffer;
 AudioEffectFreeverb         effect02Freeverb;
+AudioMixer4                 effect02Mixer;
 
 // Effect 3: 
 
@@ -33,13 +48,12 @@ AudioEffectFreeverb         effect02Freeverb;
 AudioAmplifier              postGain;
 AudioOutputI2S              lineOut;
 
-//Codec
-AudioControlSGTL5000        sgtl5000;
-
-
 // Peak detection blocks
 AudioAnalyzePeak            lineInPeak;
 AudioAnalyzePeak            lineOutPeak;
+
+//Codec
+AudioControlSGTL5000        sgtl5000;
 
 
 ///////////////////////////////////////
@@ -55,9 +69,15 @@ AudioAnalyzePeak            lineOutPeak;
 // Use sensical fomat for other constant connections with postfix _c.
 ///////////////////////////////////////
 
+// Pre-effect connections
+
 AudioConnection             lineInToPreGain_c(lineIn, 0, preGain, 0);
-AudioConnection             postGainToLineOut_c(postGain, 0, lineOut, 0);
-AudioConnection             lineInToPeak_c(lineIn, 0, lineInPeak, 0);
+AudioConnection             lineInToPeakL_c(lineIn, 0, lineInPeak, 0);
+
+// Post-effect connections
+
+AudioConnection             postGainToLineOutL_c(postGain, 0, lineOut, 0);
+AudioConnection             postGainToLineOutR_c(postGain, 0, lineOut, 1);
 AudioConnection             postGainToPeak_c(postGain, 0, lineOutPeak, 0);
 
 // Effect 0: Bypass
@@ -69,8 +89,11 @@ AudioConnection             effect01Input(preGain, 0, effect01LPF, 0);
 AudioConnection             effect01Output(effect01LPF, 0, postGain, 0);
 
 // Effect 2: Freeverb
-AudioConnection             effect02Input(preGain, 0, effect02Freeverb, 0);
-AudioConnection             effect02Output(effect02Freeverb, 0, postGain, 0);
+AudioConnection             effect02Input(preGain, 0, effect02Buffer, 0);
+AudioConnection             effect02Sub01(effect02Buffer, 0, effect02Mixer, 0);
+AudioConnection             effect02Sub02(effect02Buffer, 0, effect02Freeverb, 0);
+AudioConnection             effect02Sub03(effect02Freeverb, 0, effect02Mixer, 1);
+AudioConnection             effect02Output(effect02Mixer, 0, postGain, 0);
 
 
 /*
@@ -87,10 +110,11 @@ void T9PB_begin(void) {
     sgtl5000.enable();
     sgtl5000.inputSelect(AUDIO_INPUT_LINEIN);
     sgtl5000.lineInLevel(0);    // max input level
-    //sgtl5000.lineOutLevel(13);  // max output level
+    sgtl5000.lineOutLevel(13);  // max output level
     sgtl5000.volume(0.3);
 
-    //AudioMemory(memory);
+    preGain.gain(1.0);
+    postGain.gain(1.0);
 }
 
 /*
@@ -103,7 +127,7 @@ void T9PB_begin(void) {
 */
 void T9PB_disconnect_all_effects(void) {
     for (int i = 0; i <= NUM_EFFECTS; i++) {
-        (*T9PB_disconnectTable[i])();
+        (*effectObjects_a[i]).disconnect();
     }
 }
 
@@ -136,47 +160,12 @@ float T9PB_peak_detect(int source) {
 
 
 ///////////////////////////////////////
-// Effect switching functions
-// Functions accept void arguments and return void.
-///////////////////////////////////////
-
-// Effect 0: Bypass
-void T9PB_connect_effect_00(void) {
-    effect00Input.connect();
-    effect00Output.connect();
-}
-
-void T9PB_disconnect_effect_00(void) {
-    effect00Input.disconnect();
-    effect00Output.disconnect();
-}
-
-// Effect 1: Low Pass Filter
-void T9PB_connect_effect_01(void) {
-    effect01Input.connect();
-    effect01Output.connect();
-}
-
-void T9PB_disconnect_effect_01(void) {
-    effect01Input.disconnect();
-    effect01Output.disconnect();
-}
-
-// Effect 2: Freeverb
-void T9PB_connect_effect_02(void) {
-    effect02Input.connect();
-    effect02Output.connect();
-}
-
-void T9PB_disconnect_effect_02(void) {
-    effect02Input.disconnect();
-    effect02Output.disconnect();
-}
-
-
-///////////////////////////////////////
 // Effect parameter functions
 ///////////////////////////////////////
+
+// Null function, used for empty parameters
+// Would ideally be optimized away, but not sure.
+void nullFunc(float n) {}
 
 // Effect 1: Low Pass Filter
 void T9PB_effect01_frequency(float freq) {
@@ -192,21 +181,56 @@ void T9PB_effect02_damping(float damp) {
     effect02Freeverb.damping(damp);
 }
 
+void T9PB_effect02_wetdry(float wet) {
+    if (wet > 1.0 || wet < 0.0) return;
+    // "dry" gain
+    effect02Mixer.gain(0,wet-1.0);
+    // "wet" gain
+    effect02Mixer.gain(1,wet);
+}
+
 
 ///////////////////////////////////////
-// Effect (dis)connect tables
+// Effect objects
+// Each EffectClass object needs the following:
+//      Effect name
+//      Parameter name(s)
+//      Input connection object pointer
+//      Output connection object pointer
+//      Parameter change function pointers
 ///////////////////////////////////////
 
-void (*T9PB_connectTable[NUM_EFFECTS+1])(void) = {
-    T9PB_connect_effect_00,
-    T9PB_connect_effect_01,
-    T9PB_connect_effect_02
+// Effect 0: Bypass
+EffectClass effect00Bypass_o(
+    "Bypass", "NA", "NA", "NA",
+    &effect00Input,
+    &effect00Output,
+    nullFunc, nullFunc, nullFunc
+);
+
+// Effect 1: Low Pass Filter
+EffectClass effect01LPF_o(
+    "LPF", "Frequency", "NA", "NA",
+    &effect01Input,
+    &effect01Output,
+    T9PB_effect01_frequency, nullFunc, nullFunc
+);
+
+// Effect 2: Freeverb
+EffectClass effect02Freeverb_o(
+    "Freeverb", "Roomsize", "Damping", "Wet/Dry",
+    &effect02Input,
+    &effect02Output,
+    T9PB_effect02_roomsize, T9PB_effect02_damping, T9PB_effect02_wetdry
+);
+
+
+///////////////////////////////////////
+// Effect object pointer array
+///////////////////////////////////////
+
+EffectClass* effectObjects_a[NUM_EFFECTS+1] = {
+    &effect00Bypass_o,
+    &effect01LPF_o,
+    &effect02Freeverb_o
 };
-
-void (*T9PB_disconnectTable[NUM_EFFECTS+1])(void) = {
-    T9PB_disconnect_effect_00,
-    T9PB_disconnect_effect_01,
-    T9PB_disconnect_effect_02
-};
-
-
