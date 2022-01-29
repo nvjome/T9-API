@@ -10,11 +10,11 @@ EffectClass::EffectClass(
     const std::string& p1Name,
     const std::string& p2Name,
     const std::string& p3Name,
-    AudioConnection* iConn_p,
-    AudioConnection* oConn_p,
     void (*modP1_fp)(float),
     void (*modP2_fp)(float),
-    void (*modP3_fp)(float))
+    void (*modP3_fp)(float),
+    void (*runStart_fp)(void),
+    void (*runStop_fp)(void))
 {
     // character arrays
     effectName = eName;
@@ -22,9 +22,9 @@ EffectClass::EffectClass(
     param2Name = p2Name;
     param3Name = p3Name;
 
-    // connection Class pointers
-    inputConn_p = iConn_p;
-    outputConn_p = oConn_p;
+    // run on start/stop function pointers
+    runOnStart_fp = runStart_fp;
+    runOnStop_fp = runStop_fp;
 
     // parameter change function pointers
     modParameter1_fp = modP1_fp;
@@ -47,14 +47,14 @@ void EffectClass::modParameter3(float param) {
     modParameter3_fp(param);
 }
 
-void EffectClass::connect(void) {
-    inputConn_p->connect();
-    outputConn_p->connect();
+void EffectClass::runOnStart(void) {
+    // call function pointed to
+    runOnStart_fp();
 }
 
-void EffectClass::disconnect(void) {
-    inputConn_p->disconnect();
-    outputConn_p->disconnect();
+void EffectClass::runOnStop(void) {
+    // call function pointed to
+    runOnStop_fp();
 }
 
 std::string EffectClass::getEffectName(void) {

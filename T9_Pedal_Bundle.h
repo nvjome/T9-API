@@ -19,6 +19,8 @@
 #include <SerialFlash.h>
 
 #include "effect_passthrough.h"
+#include "one_to_ten_switch.h"
+#include "ten_to_one_mux.h"
 #include "effect_class.h"
 
 // Number of implemented effects, excluding bypass effect 0
@@ -28,15 +30,17 @@ void T9PB_begin(void);
 void T9PB_disconnect_all_effects(void);
 void T9PB_hp_volume(float volume);
 float T9PB_peak_detect(int source);
+//int T9PB
 
 
 ///////////////////////////////////////
 // Effect parameter functions
 ///////////////////////////////////////
 
-// Null function, used for empty parameters
+// Null functions, used for empty parameters
 // Would ideally be optimized away, but not sure.
 void nullFunc(float n);
+void nullFunc(void);
 
 // Effect 1: Low Pass Filter
 void T9PB_effect01_frequency(float freq);
@@ -45,6 +49,7 @@ void T9PB_effect01_frequency(float freq);
 void T9PB_effect02_roomsize(float size);
 void T9PB_effect02_damping(float damp);
 void T9PB_effect02_wetdry(float wet);
+void T9PB_effect02_start(void);
 
 
 ///////////////////////////////////////
