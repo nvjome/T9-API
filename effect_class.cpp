@@ -53,7 +53,7 @@ void EffectClass::modParameterN(int sel, float param) {
         modParameter1(param);
         break;
     case 2:
-        modParameter2(apram);
+        modParameter2(param);
         break;
     case 3:
         modParameter3(param);
