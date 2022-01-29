@@ -165,6 +165,27 @@ float T9PB_peak_detect(int source) {
     return ret;
 }
 
+/*
+    T9PB_change_effect
+    Controls input switch and output mux to change effects.
+    Arguments:
+        curEffect: Effect to turn off.
+        newEffect: Effect to turn on.
+    Returns:
+        Active effect, or -1 for error.
+*/
+int T9PB_change_effect(int curEffect, int newEffect) {
+    int ret = -1;
+    if (newEffect >= 0 && newEffect <= NUM_EFFECTS) {
+        // switch output
+        outputMux.inputSelect(newEffect);
+        // switch input
+        inputSwitch.outputSelect(newEffect);
+        ret = newEffect;
+    }
+    return ret;
+}
+
 
 ///////////////////////////////////////
 // Effect parameter functions
