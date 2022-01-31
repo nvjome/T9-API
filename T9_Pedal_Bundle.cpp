@@ -25,8 +25,8 @@
 ///////////////////////////////////////
 
 // System input objects:
-//AudioInputUSB               lineIn;
-AudioInputI2S               lineIn;
+AudioInputUSB               lineIn;
+//AudioInputI2S               lineIn;
 
 AudioAmplifier              preGain;
 
@@ -89,7 +89,7 @@ AudioConnection             postGainToPeak_c(postGain, 0, lineOutPeak, 0);
 
 // Effect 0: Bypass
 AudioConnection             effect00Input(inputSwitch, 0, effect00Bypass, 0);
-AudioConnection             effect00Output(effect00Bypass, 0, outputMux, 1);
+AudioConnection             effect00Output(effect00Bypass, 0, outputMux, 0);
 
 // Effect 1: Low Pass Filter
 AudioConnection             effect01Input(inputSwitch, 1, effect01LPF, 0);
@@ -189,7 +189,9 @@ void nullFunc(void) {}
 
 // Effect 1: Low Pass Filter
 void T9PB_effect01_frequency(float freq) {
-    effect01LPF.frequency(freq);
+    if (freq >= 20 && freq <= 15000) {
+        effect01LPF.frequency(freq);
+    }
 }
 
 // Effect 2: Freeverb
