@@ -27,7 +27,6 @@
 #define NUM_EFFECTS 2
 
 void T9PB_begin(void);
-void T9PB_disconnect_all_effects(void);
 void T9PB_hp_volume(float volume);
 float T9PB_peak_detect(int source);
 int T9PB_change_effect(int curEffect, int newEffect);
