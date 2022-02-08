@@ -30,6 +30,8 @@ AudioInputI2S               lineIn;
 
 AudioAmplifier              preGain;
 
+AudioSwitch1To11            inputSwitch;
+
 // Effect 0: Bypass
 AudioEffectPassthrough      effect00Bypass;
 
@@ -46,6 +48,9 @@ AudioMixer4                 effect02Mixer;
 
 // System output objects:
 AudioAmplifier              postGain;
+
+AudioMux11To1               outputMux;
+
 AudioOutputI2S              lineOut;
 
 // Peak detection blocks
@@ -73,27 +78,29 @@ AudioControlSGTL5000        sgtl5000;
 
 AudioConnection             lineInToPreGain_c(lineIn, 0, preGain, 0);
 AudioConnection             lineInToPeakL_c(lineIn, 0, lineInPeak, 0);
+AudioConnection             preGainToSwitch(preGain, 0, inputSwitch, 0);
 
 // Post-effect connections
 
+AudioConnection             muxToPostGain(outputMux, 0, postGain, 0);
 AudioConnection             postGainToLineOutL_c(postGain, 0, lineOut, 0);
 AudioConnection             postGainToLineOutR_c(postGain, 0, lineOut, 1);
 AudioConnection             postGainToPeak_c(postGain, 0, lineOutPeak, 0);
 
 // Effect 0: Bypass
-AudioConnection             effect00Input(preGain, 0, effect00Bypass, 0);
-AudioConnection             effect00Output(effect00Bypass, 0, postGain, 0);
+AudioConnection             effect00Input(inputSwitch, 0, effect00Bypass, 0);
+AudioConnection             effect00Output(effect00Bypass, 0, outputMux, 0);
 
 // Effect 1: Low Pass Filter
-AudioConnection             effect01Input(preGain, 0, effect01LPF, 0);
-AudioConnection             effect01Output(effect01LPF, 0, postGain, 0);
+AudioConnection             effect01Input(inputSwitch, 1, effect01LPF, 0);
+AudioConnection             effect01Output(effect01LPF, 0, outputMux, 1);
 
 // Effect 2: Freeverb
-AudioConnection             effect02Input(preGain, 0, effect02Buffer, 0);
+AudioConnection             effect02Input(inputSwitch, 2, effect02Buffer, 0);
 AudioConnection             effect02Sub01(effect02Buffer, 0, effect02Mixer, 0);
 AudioConnection             effect02Sub02(effect02Buffer, 0, effect02Freeverb, 0);
 AudioConnection             effect02Sub03(effect02Freeverb, 0, effect02Mixer, 1);
-AudioConnection             effect02Output(effect02Mixer, 0, postGain, 0);
+AudioConnection             effect02Output(effect02Mixer, 0, outputMux, 2);
 
 
 /*
@@ -105,7 +112,9 @@ AudioConnection             effect02Output(effect02Mixer, 0, postGain, 0);
     at compile time.
 */
 void T9PB_begin(void) {
-    T9PB_disconnect_all_effects();
+    // default software passthrough
+    inputSwitch.outputSelect(0);
+    outputMux.inputSelect(0);
 
     sgtl5000.enable();
     sgtl5000.inputSelect(AUDIO_INPUT_LINEIN);
@@ -115,20 +124,6 @@ void T9PB_begin(void) {
 
     preGain.gain(1.0);
     postGain.gain(1.0);
-}
-
-/*
-    T9PB_disconnect_all_effects
-    Disconnects all effects.
-
-    TODO: May change to just iterating through an array of
-    pointers to the AudioConnection objects that are the input
-    and output connections to each effect.
-*/
-void T9PB_disconnect_all_effects(void) {
-    for (int i = 0; i <= NUM_EFFECTS; i++) {
-        (*effectObjects_a[i]).disconnect();
-    }
 }
 
 void T9PB_hp_volume(float volume) {
@@ -154,7 +149,31 @@ float T9PB_peak_detect(int source) {
             ret = lineOutPeak.read();
         }
     }
+    return ret;
+}
 
+/*
+    T9PB_change_effect
+    Controls input switch and output mux to change effects.
+    Arguments:
+        curEffect: Effect to turn off.
+        newEffect: Effect to turn on.
+    Returns:
+        Active effect, or -1 for error.
+*/
+int T9PB_change_effect(int curEffect, int newEffect) {
+    int ret = -1;
+    if (newEffect >= 0 && newEffect <= NUM_EFFECTS) {
+        // run on stop function
+        effectObjects_a[curEffect]->runOnStop();
+        // switch output
+        outputMux.inputSelect(newEffect);
+        // switch input
+        inputSwitch.outputSelect(newEffect);
+        // run on start function
+        effectObjects_a[newEffect]->runOnStart();
+        ret = newEffect;
+    }
     return ret;
 }
 
@@ -166,10 +185,13 @@ float T9PB_peak_detect(int source) {
 // Null function, used for empty parameters
 // Would ideally be optimized away, but not sure.
 void nullFunc(float n) {}
+void nullFunc(void) {}
 
 // Effect 1: Low Pass Filter
 void T9PB_effect01_frequency(float freq) {
-    effect01LPF.frequency(freq);
+    if (freq >= 20 && freq <= 15000) {
+        effect01LPF.frequency(freq);
+    }
 }
 
 // Effect 2: Freeverb
@@ -182,11 +204,18 @@ void T9PB_effect02_damping(float damp) {
 }
 
 void T9PB_effect02_wetdry(float wet) {
-    if (wet > 1.0 || wet < 0.0) return;
-    // "dry" gain
-    effect02Mixer.gain(0,wet-1.0);
-    // "wet" gain
-    effect02Mixer.gain(1,wet);
+    if (wet <= 1.0 && wet >= 0.0) {
+        // "dry" gain
+        effect02Mixer.gain(0,wet-1.0);
+        // "wet" gain
+        effect02Mixer.gain(1,wet);
+    }
+}
+
+void T9PB_effect02_start(void) {
+    // default gain values
+    effect02Mixer.gain(0,0.5);
+    effect02Mixer.gain(1,0.5);
 }
 
 
@@ -203,25 +232,23 @@ void T9PB_effect02_wetdry(float wet) {
 // Effect 0: Bypass
 EffectClass effect00Bypass_o(
     "Bypass", "NA", "NA", "NA",
-    &effect00Input,
-    &effect00Output,
-    nullFunc, nullFunc, nullFunc
+    nullFunc, nullFunc, nullFunc,
+    nullFunc, nullFunc
 );
 
 // Effect 1: Low Pass Filter
 EffectClass effect01LPF_o(
     "LPF", "Frequency", "NA", "NA",
-    &effect01Input,
-    &effect01Output,
-    T9PB_effect01_frequency, nullFunc, nullFunc
+    T9PB_effect01_frequency, nullFunc, nullFunc,
+    nullFunc, nullFunc
+
 );
 
 // Effect 2: Freeverb
 EffectClass effect02Freeverb_o(
     "Freeverb", "Roomsize", "Damping", "Wet/Dry",
-    &effect02Input,
-    &effect02Output,
-    T9PB_effect02_roomsize, T9PB_effect02_damping, T9PB_effect02_wetdry
+    T9PB_effect02_roomsize, T9PB_effect02_damping, T9PB_effect02_wetdry,
+    T9PB_effect02_start, nullFunc
 );
 
 

@@ -1,4 +1,8 @@
 /*
+    Class to store information for a given effect.
+    Does not include Teensy Audio objects, only wrapper information
+    and functions for access by application code.
+
     Nolan Jome
 */
 
@@ -16,18 +20,19 @@ public:
         const std::string& p1Name,
         const std::string& p2Name,
         const std::string& p3Name,
-        AudioConnection* iConn_p,
-        AudioConnection* oConn_p,
         void (*modP1_fp)(float),
         void (*modP2_fp)(float),
-        void (*modP3_fp)(float));
+        void (*modP3_fp)(float),
+        void (*runStart_fp)(void),
+        void (*runStop_fp)(void));
     
     void modParameter1(float param);
     void modParameter2(float param);
     void modParameter3(float param);
+    void modParameterN(int sel, float param);
 
-    void connect(void);
-    void disconnect(void);
+    void runOnStart(void);
+    void runOnStop(void);
 
     std::string getEffectName(void);
     std::string getParameterName(int n);
@@ -39,9 +44,9 @@ private:
     std::string param2Name;
     std::string param3Name;
 
-    // connection object pointers
-    AudioConnection* inputConn_p;
-    AudioConnection* outputConn_p;
+    // run on start/stop function pointers
+    void (*runOnStart_fp)(void);
+    void (*runOnStop_fp)(void);
 
     // parameter change function pointers
     void (*modParameter1_fp)(float);

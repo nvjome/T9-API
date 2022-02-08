@@ -5,15 +5,19 @@ EffectClass	KEYWORD1
 
 # Methods (KEYWORD2)
 T9PB_begin	KEYWORD2
-T9PB_disconnect_all_effects	KEYWORD2
 T9PB_hp_volume	KEYWORD2
 T9PB_peak_detect	KEYWORD2
+T9PB_change_effect	KEYWORD2
 ## EffectClass methods
 getEffectName	KEYWORD2
 getParameterName	KEYWORD2
 modParameter1	KEYWORD2
 modParameter2	KEYWORD2
 modParameter3	KEYWORD2
+runOnStart	KEYWORD2
+runOnStop	KEYWORD2
+getEffectName	KEYWORD2
+getParameterName	KEYWORD2
 
 # Constants (LITERAL1)
 NUM_EFFECTS	LITERAL1
