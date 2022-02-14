@@ -189,7 +189,15 @@ void nullFunc(void) {}
 
 // Effect 1: Low Pass Filter
 void T9PB_effect01_frequency(float freq) {
-    if (freq >= 20 && freq <= 15000) {
+    /*if (freq >= 20 && freq <= 15000) {
+        effect01LPF.frequency(freq);
+    }*/
+    // better handles out of bound input by clamping to the min/max
+    if (freq <= 20.0) {
+        effect01LPF.frequency(20.0);
+    } else if (freq >= 15000.0) {
+        effect01LPF.frequency(15000.0);
+    } else {
         effect01LPF.frequency(freq);
     }
 }
@@ -204,7 +212,22 @@ void T9PB_effect02_damping(float damp) {
 }
 
 void T9PB_effect02_wetdry(float wet) {
-    if (wet <= 1.0 && wet >= 0.0) {
+    /*if (wet <= 1.0 && wet >= 0.0) {
+        // "dry" gain
+        effect02Mixer.gain(0,wet-1.0);
+        // "wet" gain
+        effect02Mixer.gain(1,wet);
+    }*/
+    // better handles out of bound input by clamping to the min/max
+    if (wet <= 0.0) {
+        // full dry
+        effect02Mixer.gain(0,1.0);
+        effect02Mixer.gain(1,0.0);
+    } else if (wet >= 1.0) {
+        // full wet
+        effect02Mixer.gain(0,0.0);
+        effect02Mixer.gain(0,1.0);
+    } else {
         // "dry" gain
         effect02Mixer.gain(0,wet-1.0);
         // "wet" gain
