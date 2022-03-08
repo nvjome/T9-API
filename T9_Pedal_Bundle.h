@@ -30,6 +30,8 @@ void T9PB_begin(void);
 void T9PB_hp_volume(float volume);
 float T9PB_peak_detect(int source);
 int T9PB_change_effect(int curEffect, int newEffect);
+std::string T9PB_get_effect_name(int effect);
+std::string T9PB_get_effect_name(int effect, int param);
 
 
 ///////////////////////////////////////

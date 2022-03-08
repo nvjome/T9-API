@@ -177,6 +177,20 @@ int T9PB_change_effect(int curEffect, int newEffect) {
     return ret;
 }
 
+std::string T9PB_get_effect_name(int effect) {
+    if (effect <= NUM_EFFECTS && effect >= 0) {
+        return effectObjects_a[effect]->getEffectName();
+    }
+}
+
+std::string T9PB_get_effect_name(int effect, int param) {
+    if (effect <= NUM_EFFECTS && effect >= 0) {
+        if (param <= 3) {
+            return effectObjects_a[effect]->getParameterName(param);
+        }
+    }
+}
+
 
 ///////////////////////////////////////
 // Effect parameter functions
