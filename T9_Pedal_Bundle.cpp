@@ -191,6 +191,17 @@ std::string T9PB_get_parameter_name(int effect, int param) {
     }
 }
 
+int T9PB_change_parameter(int effect, int param, float value) {
+    int ret = -1;
+    if (effect <= NUM_EFFECTS && effect >= 0) {
+        if (param <= 3 && param > 0) {
+            effectObjects_a[effect]->modParameterN(param, value);
+            ret = 0;
+        }
+    }
+    return ret;
+}
+
 
 ///////////////////////////////////////
 // Effect parameter functions
