@@ -3,11 +3,15 @@
 # Classes (KEYWORD1)
 EffectClass	KEYWORD1
 
-# Methods (KEYWORD2)
+# Global Methods (KEYWORD2)
 T9PB_begin	KEYWORD2
 T9PB_hp_volume	KEYWORD2
 T9PB_peak_detect	KEYWORD2
 T9PB_change_effect	KEYWORD2
+T9PB_get_effect_name	KEYWORD2
+T9PB_get_parameter_name	KEYWORD2
+T9PB_change_parameter	KEYWORD2
+
 ## EffectClass methods
 getEffectName	KEYWORD2
 getParameterName	KEYWORD2
