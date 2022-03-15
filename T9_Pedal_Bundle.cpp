@@ -27,9 +27,7 @@
 // System input objects:
 //AudioInputUSB               lineIn;
 AudioInputI2S               lineIn;
-
 AudioAmplifier              preGain;
-
 AudioSwitch1To11            inputSwitch;
 
 // Effect 0: Bypass
@@ -43,14 +41,15 @@ AudioEffectPassthrough      effect02Buffer;
 AudioEffectFreeverb         effect02Freeverb;
 AudioMixer4                 effect02Mixer;
 
-// Effect 3: 
-
+// Effect 3:  Tremolo
+AudioSynthWaveformDc        effect03Dc;
+AudioSynthWaveformSine      effect03Sine;
+AudioMixer4                 effect03Mixer;
+AudioEffectMultiply         effect03Multiply;
 
 // System output objects:
 AudioAmplifier              postGain;
-
 AudioMux11To1               outputMux;
-
 AudioOutputI2S              lineOut;
 
 // Peak detection blocks
@@ -101,6 +100,13 @@ AudioConnection             effect02Sub01(effect02Buffer, 0, effect02Mixer, 0);
 AudioConnection             effect02Sub02(effect02Buffer, 0, effect02Freeverb, 0);
 AudioConnection             effect02Sub03(effect02Freeverb, 0, effect02Mixer, 1);
 AudioConnection             effect02Output(effect02Mixer, 0, outputMux, 2);
+
+// Effect 3: Tremolo
+AudioConnection             effect03Input(inputSwitch, 3, effect03Multiply, 1);
+AudioConnection             effect03Sub01(effect03Dc, 0, effect03Mixer, 0);
+AudioConnection             effect03Sub02(effect03Sine, 0, effect03Mixer, 1);
+AudioConnection             effect03Sub03(effect03Mixer, 0, effect03Multiply, 0);
+AudioConnection             effect03Output(effect03Multiply, 0, outputMux, 3);
 
 
 /*
@@ -283,6 +289,38 @@ void T9PB_effect02_start(void) {
     effect02Mixer.gain(1,0.5);
 }
 
+// Effect 3: Tremolo
+void T9PB_effect03_depth(float dep) {
+    if (dep <= 0.0) {
+        effect03Dc.amplitude(1.0);
+        effect03Sine.amplitude(0);
+    } else if (dep >= 1.0) {
+        effect03Dc.amplitude(0);
+        effect03Sine.amplitude(1.0);
+    } else {
+        effect03Dc.amplitude(1.0 - dep);
+        effect03Sine.amplitude(dep);
+    }
+}
+
+void T9PB_effect03_rate(float rate) {
+    if (rate <= 0.0) {
+        effect03Sine.frequency(0);
+    } else if (rate >= 20.0) {
+        effect03Sine.frequency(20.0);
+    } else {
+        effect03Sine.frequency(rate);
+    }
+}
+
+void T9PB_effect03_start(void) {
+    // default gain values
+    effect03Mixer.gain(0,1.0);
+    effect03Mixer.gain(1,1.0);
+    // default synth values
+    effect03Dc.amplitude(1.0);
+    effect03Sine.amplitude(0.0);
+}
 
 ///////////////////////////////////////
 // Effect objects
@@ -316,6 +354,13 @@ EffectClass effect02Freeverb_o(
     T9PB_effect02_start, nullFunc
 );
 
+// Effect 3: Tremolo
+EffectClass effect03Tremolo_o(
+    "Tremelo", "Depth", "Rate", "NA",
+    T9PB_effect03_depth, T9PB_effect03_rate, nullFunc,
+    T9PB_effect03_start, nullFunc
+);
+
 
 ///////////////////////////////////////
 // Effect object pointer array
@@ -324,5 +369,6 @@ EffectClass effect02Freeverb_o(
 EffectClass* effectObjects_a[NUM_EFFECTS+1] = {
     &effect00Bypass_o,
     &effect01LPF_o,
-    &effect02Freeverb_o
+    &effect02Freeverb_o,
+    &effect03Tremolo_o
 };
