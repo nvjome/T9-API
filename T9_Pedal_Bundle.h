@@ -24,7 +24,7 @@
 #include "effect_class.h"
 
 // Number of implemented effects, excluding bypass effect 0
-#define NUM_EFFECTS 2
+#define NUM_EFFECTS 3
 
 void T9PB_begin(void);
 void T9PB_hp_volume(float volume);
@@ -52,6 +52,11 @@ void T9PB_effect02_roomsize(float size);
 void T9PB_effect02_damping(float damp);
 void T9PB_effect02_wetdry(float wet);
 void T9PB_effect02_start(void);
+
+// Effect 3: Tremolo
+void T9PB_effect03_depth(float dep);
+void T9PB_effect03_rate(float rate);
+void T9PB_effect03_start(void);
 
 
 ///////////////////////////////////////
