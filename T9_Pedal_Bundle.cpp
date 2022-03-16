@@ -382,8 +382,13 @@ void effect04_update_params(void) {
 }
 
 void T9PB_effect04_start(void) {
-    // restore previous values
+    // restore previous tap/time values
     effect04_update_params();
+    // set mixer gains
+    for (int i = 0; i < 4; i++) {
+        // decrease gain by 12.5% each delay tap
+        effect04Mixer.gain(i, 1.0 - i*0.125);
+    }
 }
 
 void T9PB_effect04_stop(void) {
