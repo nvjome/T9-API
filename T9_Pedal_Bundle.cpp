@@ -120,6 +120,7 @@ AudioConnection             effect04Sub02(effect04Buffer, 0, effect04Delay, 0);
 AudioConnection             effect04Sub03(effect04Delay, 0, effect04Mixer, 1);
 AudioConnection             effect04Sub04(effect04Delay, 1, effect04Mixer, 2);
 AudioConnection             effect04Sub05(effect04Delay, 2, effect04Mixer, 3);
+AudioConnection             effect04Output(effect04Mixer, 0, outputMux, 4);
 
 /*
     T9PB_begin
@@ -358,13 +359,14 @@ void T9PB_effect04_time(float t) {
     effect04_update_params();
 }
 
-void T9PB_effect04_taps(int taps) {
-    if (taps < 0 ) {
+void T9PB_effect04_taps(float taps) {
+    int taps_l = (int)(taps + 0.5);
+    if (taps_l < 0 ) {
         effect04_taps = 0;
-    } else if (taps > E4_MAX_TAPS) {
+    } else if (taps_l > E4_MAX_TAPS) {
         effect04_taps = E4_MAX_TAPS;
     } else {
-        effect04_taps = taps;
+        effect04_taps = taps_l;
     }
     effect04_update_params();
 }
