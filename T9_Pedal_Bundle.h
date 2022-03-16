@@ -63,6 +63,7 @@ void T9PB_effect04_time(float t);
 void T9PB_effect04_taps(int taps);
 void T9PB_effect04_start(void);
 void T9PB_effect04_stop(void);
+void effect04_update_params(void);
 
 
 ///////////////////////////////////////

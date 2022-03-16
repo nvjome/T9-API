@@ -49,7 +49,7 @@ AudioEffectMultiply         effect03Multiply;
 
 // Effect 4: Delay
 AudioEffectPassthrough      effect04Buffer;
-Audi0EffectDelay            effect04Delay;
+AudioEffectDelay            effect04Delay;
 AudioMixer4                 effect04Mixer;
 
 // System output objects:
@@ -342,16 +342,16 @@ void T9PB_effect03_start(void) {
 
 // Effect 4: Delay
 #define E4_MAX_DELAY_TIME 250.0 // ms
-#define E4_MIN_DElAY_TIME 1.0   // ms
+#define E4_MIN_DELAY_TIME 1.0   // ms
 #define E4_MAX_TAPS 3
 float effect04_time = 50.0;
 int effect04_taps = 3;
 
 void T9PB_effect04_time(float t) {
     if (t <= 0.0) {
-        effect04_time = E4_MIN_DElAY_TIME;
+        effect04_time = E4_MIN_DELAY_TIME;
     } else if (t >= E4_MAX_DELAY_TIME) {
-        effect04_time = E4_MAX_DElAY_TIME;
+        effect04_time = E4_MAX_DELAY_TIME;
     } else {
         effect04_time = t;
     }
