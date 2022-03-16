@@ -47,6 +47,11 @@ AudioSynthWaveformSine      effect03Sine;
 AudioMixer4                 effect03Mixer;
 AudioEffectMultiply         effect03Multiply;
 
+// Effect 4: Delay
+AudioEffectPassthrough      effect04Buffer;
+Audi0EffectDelay            effect04Delay;
+AudioMixer4                 effect04Mixer;
+
 // System output objects:
 AudioAmplifier              postGain;
 AudioMux11To1               outputMux;
@@ -108,6 +113,13 @@ AudioConnection             effect03Sub02(effect03Sine, 0, effect03Mixer, 1);
 AudioConnection             effect03Sub03(effect03Mixer, 0, effect03Multiply, 0);
 AudioConnection             effect03Output(effect03Multiply, 0, outputMux, 3);
 
+// Effect 4: Delay
+AudioConnection             effect04Input(inputSwitch, 4, effect04Buffer, 0);
+AudioConnection             effect04Sub01(effect04Buffer, 0, effect04Mixer, 0);
+AudioConnection             effect04Sub02(effect04Buffer, 0, effect04Delay, 0);
+AudioConnection             effect04Sub03(effect04Delay, 0, effect04Mixer, 1);
+AudioConnection             effect04Sub04(effect04Delay, 1, effect04Mixer, 2);
+AudioConnection             effect04Sub05(effect04Delay, 2, effect04Mixer, 3);
 
 /*
     T9PB_begin
@@ -328,6 +340,59 @@ void T9PB_effect03_start(void) {
     effect03Sine.amplitude(0.0);
 }
 
+// Effect 4: Delay
+#define E4_MAX_DELAY_TIME 250.0 // ms
+#define E4_MIN_DElAY_TIME 1.0   // ms
+#define E4_MAX_TAPS 3
+float effect04_time = 50.0;
+int effect04_taps = 3;
+
+void T9PB_effect04_time(float t) {
+    if (t <= 0.0) {
+        effect04_time = E4_MIN_DElAY_TIME;
+    } else if (t >= E4_MAX_DELAY_TIME) {
+        effect04_time = E4_MAX_DElAY_TIME;
+    } else {
+        effect04_time = t;
+    }
+    effect04_update_params();
+}
+
+void T9PB_effect04_taps(int taps) {
+    if (taps < 0 ) {
+        effect04_taps = 0;
+    } else if (taps > E4_MAX_TAPS) {
+        effect04_taps = E4_MAX_TAPS;
+    } else {
+        effect04_taps = taps;
+    }
+    effect04_update_params();
+}
+
+void effect04_update_params(void) {
+    // iterate through taps and apply delay time
+    int i;
+    for (i = 0; i < effect04_taps; i++) {
+        effect04Delay.delay(i, (float)(i+1)*effect04_time);
+    }
+    // disable unused taps
+    for (; i < 8; i++) {
+        effect04Delay.disable(i);
+    }
+}
+
+void T9PB_effect04_start(void) {
+    // restore previous values
+    effect04_update_params();
+}
+
+void T9PB_effect04_stop(void) {
+    // disable all taps
+    for (int i = 0; i < 8; i++) {
+        effect04Delay.disable(i);
+    }
+}
+
 ///////////////////////////////////////
 // Effect objects
 // Each EffectClass object needs the following:
@@ -367,6 +432,13 @@ EffectClass effect03Tremolo_o(
     T9PB_effect03_start, nullFunc
 );
 
+// Effect 4: Delay
+EffectClass effect04Delay_o(
+    "Delay", "Time", "Taps", "NA",
+    T9PB_effect04_time, T9PB_effect04_taps, nullFunc,
+    T9PB_effect04_start, T9PB_effect04_stop
+);
+
 
 ///////////////////////////////////////
 // Effect object pointer array
@@ -376,5 +448,6 @@ EffectClass* effectObjects_a[NUM_EFFECTS+1] = {
     &effect00Bypass_o,
     &effect01LPF_o,
     &effect02Freeverb_o,
-    &effect03Tremolo_o
+    &effect03Tremolo_o,
+    &effect04Delay_o
 };

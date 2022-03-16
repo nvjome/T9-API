@@ -24,7 +24,7 @@
 #include "effect_class.h"
 
 // Number of implemented effects, excluding bypass effect 0
-#define NUM_EFFECTS 3
+#define NUM_EFFECTS 4
 
 void T9PB_begin(void);
 void T9PB_hp_volume(float volume);
@@ -57,6 +57,12 @@ void T9PB_effect02_start(void);
 void T9PB_effect03_depth(float dep);
 void T9PB_effect03_rate(float rate);
 void T9PB_effect03_start(void);
+
+// Effect 4: Delay
+void T9PB_effect04_time(float t);
+void T9PB_effect04_taps(int taps);
+void T9PB_effect04_start(void);
+void T9PB_effect04_stop(void);
 
 
 ///////////////////////////////////////
