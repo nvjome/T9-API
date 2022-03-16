@@ -333,9 +333,8 @@ void T9PB_effect03_start(void) {
 // Each EffectClass object needs the following:
 //      Effect name
 //      Parameter name(s)
-//      Input connection object pointer
-//      Output connection object pointer
 //      Parameter change function pointers
+//      Run on start and stop function pointers
 ///////////////////////////////////////
 
 // Effect 0: Bypass
