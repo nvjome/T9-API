@@ -50,7 +50,9 @@ AudioEffectMultiply         effect03Multiply;
 // Effect 4: Delay
 AudioEffectPassthrough      effect04Buffer;
 AudioEffectDelay            effect04Delay;
-AudioMixer4                 effect04Mixer;
+AudioMixer4                 effect04Mixer1;
+AudioMixer4                 effect04Mixer2;
+AudioMixer4                 effect04Mixer3;
 
 // System output objects:
 AudioAmplifier              postGain;
@@ -115,12 +117,19 @@ AudioConnection             effect03Output(effect03Multiply, 0, outputMux, 3);
 
 // Effect 4: Delay
 AudioConnection             effect04Input(inputSwitch, 4, effect04Buffer, 0);
-AudioConnection             effect04Sub01(effect04Buffer, 0, effect04Mixer, 0);
+AudioConnection             effect04Sub01(effect04Buffer, 0, effect04Mixer3, 0);
 AudioConnection             effect04Sub02(effect04Buffer, 0, effect04Delay, 0);
-AudioConnection             effect04Sub03(effect04Delay, 0, effect04Mixer, 1);
-AudioConnection             effect04Sub04(effect04Delay, 1, effect04Mixer, 2);
-AudioConnection             effect04Sub05(effect04Delay, 2, effect04Mixer, 3);
-AudioConnection             effect04Output(effect04Mixer, 0, outputMux, 4);
+AudioConnection             effect04Sub03(effect04Delay, 0, effect04Mixer1, 0);
+AudioConnection             effect04Sub04(effect04Delay, 1, effect04Mixer1, 1);
+AudioConnection             effect04Sub05(effect04Delay, 2, effect04Mixer1, 2);
+AudioConnection             effect04Sub06(effect04Delay, 3, effect04Mixer1, 3);
+AudioConnection             effect04Sub07(effect04Delay, 4, effect04Mixer2, 0);
+AudioConnection             effect04Sub08(effect04Delay, 5, effect04Mixer2, 1);
+AudioConnection             effect04Sub09(effect04Delay, 6, effect04Mixer2, 2);
+AudioConnection             effect04Sub10(effect04Delay, 7, effect04Mixer2, 3);
+AudioConnection             effect04Sub11(effect04Mixer1, 0, effect04Mixer3, 1);
+AudioConnection             effect04Sub11(effect04Mixer2, 0, effect04Mixer3, 2);
+AudioConnection             effect04Output(effect04Mixer3, 0, outputMux, 4);
 
 /*
     T9PB_begin
@@ -344,7 +353,7 @@ void T9PB_effect03_start(void) {
 // Effect 4: Delay
 #define E4_MAX_DELAY_TIME 250.0 // ms
 #define E4_MIN_DELAY_TIME 1.0   // ms
-#define E4_MAX_TAPS 3
+#define E4_MAX_TAPS 8
 float effect04_time = 50.0;
 int effect04_taps = 3;
 
@@ -387,10 +396,18 @@ void T9PB_effect04_start(void) {
     // restore previous tap/time values
     effect04_update_params();
     // set mixer gains
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 8; i++) {
         // decrease gain by 12.5% each delay tap
-        effect04Mixer.gain(i, 1.0 - i*0.125);
+        if (i < 4) {
+            effect04Mixer1.gain(i, 1.0 - i*0.125);
+        } else {
+            effect04Mixer2.gain(i-4, 1.0 - i*0.125);
+        }
     }
+    effect04Mixer3.gain(0, 1.0);
+    effect04Mixer3.gain(1, 1.0);
+    effect04Mixer3.gain(2, 0.0);
+    effect04Mixer3.gain(3, 0.0);
 }
 
 void T9PB_effect04_stop(void) {
