@@ -128,7 +128,7 @@ AudioConnection             effect04Sub08(effect04Delay, 5, effect04Mixer2, 1);
 AudioConnection             effect04Sub09(effect04Delay, 6, effect04Mixer2, 2);
 AudioConnection             effect04Sub10(effect04Delay, 7, effect04Mixer2, 3);
 AudioConnection             effect04Sub11(effect04Mixer1, 0, effect04Mixer3, 1);
-AudioConnection             effect04Sub11(effect04Mixer2, 0, effect04Mixer3, 2);
+AudioConnection             effect04Sub12(effect04Mixer2, 0, effect04Mixer3, 2);
 AudioConnection             effect04Output(effect04Mixer3, 0, outputMux, 4);
 
 /*
