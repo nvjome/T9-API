@@ -343,13 +343,13 @@ void T9PB_effect03_depth(float dep) {
 void T9PB_effect03_rate(float rate) {
     if (rate <= 0.0) {
         effect03Sine.frequency(0.0);
-        T9PB_effect03_rate = 0.0;
+        effect03_rate = 0.0;
     } else if (rate >= 20.0) {
         effect03Sine.frequency(20.0);
-        T9PB_effect03_rate = 20.0;
+        effect03_rate = 20.0;
     } else {
         effect03Sine.frequency(rate);
-        T9PB_effect03_rate = rate;
+        effect03_rate = rate;
     }
 }
 
