@@ -279,6 +279,7 @@ void T9PB_effect01_frequency(float freq) {
 }
 
 // Effect 2: Freeverb
+float effect02_wet = 0.5;
 void T9PB_effect02_roomsize(float size) {
     effect02Freeverb.roomsize(size);
 }
@@ -299,55 +300,62 @@ void T9PB_effect02_wetdry(float wet) {
         // full dry
         effect02Mixer.gain(0,1.0);
         effect02Mixer.gain(1,0.0);
+        effect02_wet = 0.0;
     } else if (wet >= 1.0) {
         // full wet
         effect02Mixer.gain(0,0.0);
         effect02Mixer.gain(0,1.0);
+        effect02_wet = 1.0;
     } else {
         // "dry" gain
         effect02Mixer.gain(0,wet-1.0);
         // "wet" gain
         effect02Mixer.gain(1,wet);
+        effect02_wet = wet;
     }
 }
 
 void T9PB_effect02_start(void) {
     // default gain values
-    effect02Mixer.gain(0,0.5);
-    effect02Mixer.gain(1,0.5);
+    effect02Mixer.gain(0, 1.0-effect02_wet);
+    effect02Mixer.gain(1, effect02_wet);
 }
 
 // Effect 3: Tremolo
+float effect03_depth = 0.1;
+float effect03_rate = 5.0;
 void T9PB_effect03_depth(float dep) {
     if (dep <= 0.0) {
         effect03Dc.amplitude(1.0);
         effect03Sine.amplitude(0);
+        effect03_depth = 0.0;
     } else if (dep >= 1.0) {
         effect03Dc.amplitude(0);
         effect03Sine.amplitude(1.0);
+        effect03_depth = 1.0;
     } else {
         effect03Dc.amplitude(1.0 - dep);
         effect03Sine.amplitude(dep);
+        effect03_depth = dep;
     }
 }
 
 void T9PB_effect03_rate(float rate) {
     if (rate <= 0.0) {
-        effect03Sine.frequency(0);
+        effect03Sine.frequency(0.0);
+        T9PB_effect03_rate = 0.0;
     } else if (rate >= 20.0) {
         effect03Sine.frequency(20.0);
+        T9PB_effect03_rate = 20.0;
     } else {
         effect03Sine.frequency(rate);
+        T9PB_effect03_rate = rate;
     }
 }
 
 void T9PB_effect03_start(void) {
-    // default gain values
-    effect03Mixer.gain(0,1.0);
-    effect03Mixer.gain(1,1.0);
-    // default synth values
-    effect03Dc.amplitude(1.0);
-    effect03Sine.amplitude(0.0);
+    T9PB_effect03_depth(effect03_depth);
+    T9PB_effect03_rate(effect03_rate);
 }
 
 // Effect 4: Delay
@@ -385,14 +393,16 @@ void T9PB_effect04_gain(float gain) {
     if (gain < 0.0) {
         effect04Mixer3.gain(1, 0.0);
         effect04Mixer3.gain(2, 0.0);
+        effect04_gain = 0.0;
     } else if (gain > 1.0) {
         effect04Mixer3.gain(1, 1.0);
         effect04Mixer3.gain(2, 1.0);
+        effect04_gain = 1.0;
     } else {
         effect04Mixer3.gain(1, gain);
         effect04Mixer3.gain(2, gain);
+        effect04_gain = gain;
     }
-    effect04_gain = gain;
 }
 
 void effect04_update_params(void) {
