@@ -370,7 +370,7 @@ void T9PB_effect04_time(float t) {
 
 void T9PB_effect04_taps(float taps) {
     int taps_l = (int)(taps + 0.5);
-    if (taps_l < 0 ) {
+    if (taps_l < 0) {
         effect04_taps = 0;
     } else if (taps_l > E4_MAX_TAPS) {
         effect04_taps = E4_MAX_TAPS;
@@ -378,6 +378,20 @@ void T9PB_effect04_taps(float taps) {
         effect04_taps = taps_l;
     }
     effect04_update_params();
+}
+
+void T9PB_effect04_gain(float gain) {
+    if (gain < 0.0) {
+        effect04Mixer3.gain(1, 0.0);
+        effect04Mixer3.gain(2, 0.0);
+    } else if (gain > 1.0) {
+        effect04Mixer3.gain(1, 1.0);
+        effect04Mixer3.gain(2, 1.0);
+    } else {
+        effect04Mixer3.gain(1, gain);
+        effect04Mixer3.gain(2, gain);
+    }
+    
 }
 
 void effect04_update_params(void) {
@@ -405,8 +419,8 @@ void T9PB_effect04_start(void) {
         }
     }
     effect04Mixer3.gain(0, 1.0);
-    effect04Mixer3.gain(1, 1.0);
-    effect04Mixer3.gain(2, 0.0);
+    effect04Mixer3.gain(1, 0.8);
+    effect04Mixer3.gain(2, 0.8);
     effect04Mixer3.gain(3, 0.0);
 }
 
@@ -458,8 +472,8 @@ EffectClass effect03Tremolo_o(
 
 // Effect 4: Delay
 EffectClass effect04Delay_o(
-    "Delay", "Time", "Taps", "NA",
-    T9PB_effect04_time, T9PB_effect04_taps, nullFunc,
+    "Delay", "Time", "Taps", "Gain",
+    T9PB_effect04_time, T9PB_effect04_taps, T9PB_effect04_gain,
     T9PB_effect04_start, T9PB_effect04_stop
 );
 
