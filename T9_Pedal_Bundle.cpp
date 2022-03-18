@@ -47,6 +47,13 @@ AudioSynthWaveformSine      effect03Sine;
 AudioMixer4                 effect03Mixer;
 AudioEffectMultiply         effect03Multiply;
 
+// Effect 4: Delay
+AudioEffectPassthrough      effect04Buffer;
+AudioEffectDelay            effect04Delay;
+AudioMixer4                 effect04Mixer1;
+AudioMixer4                 effect04Mixer2;
+AudioMixer4                 effect04Mixer3;
+
 // System output objects:
 AudioAmplifier              postGain;
 AudioMux11To1               outputMux;
@@ -108,6 +115,21 @@ AudioConnection             effect03Sub02(effect03Sine, 0, effect03Mixer, 1);
 AudioConnection             effect03Sub03(effect03Mixer, 0, effect03Multiply, 0);
 AudioConnection             effect03Output(effect03Multiply, 0, outputMux, 3);
 
+// Effect 4: Delay
+AudioConnection             effect04Input(inputSwitch, 4, effect04Buffer, 0);
+AudioConnection             effect04Sub01(effect04Buffer, 0, effect04Mixer3, 0);
+AudioConnection             effect04Sub02(effect04Buffer, 0, effect04Delay, 0);
+AudioConnection             effect04Sub03(effect04Delay, 0, effect04Mixer1, 0);
+AudioConnection             effect04Sub04(effect04Delay, 1, effect04Mixer1, 1);
+AudioConnection             effect04Sub05(effect04Delay, 2, effect04Mixer1, 2);
+AudioConnection             effect04Sub06(effect04Delay, 3, effect04Mixer1, 3);
+AudioConnection             effect04Sub07(effect04Delay, 4, effect04Mixer2, 0);
+AudioConnection             effect04Sub08(effect04Delay, 5, effect04Mixer2, 1);
+AudioConnection             effect04Sub09(effect04Delay, 6, effect04Mixer2, 2);
+AudioConnection             effect04Sub10(effect04Delay, 7, effect04Mixer2, 3);
+AudioConnection             effect04Sub11(effect04Mixer1, 0, effect04Mixer3, 1);
+AudioConnection             effect04Sub12(effect04Mixer2, 0, effect04Mixer3, 2);
+AudioConnection             effect04Output(effect04Mixer3, 0, outputMux, 4);
 
 /*
     T9PB_begin
@@ -328,6 +350,86 @@ void T9PB_effect03_start(void) {
     effect03Sine.amplitude(0.0);
 }
 
+// Effect 4: Delay
+#define E4_MAX_DELAY_TIME 250.0 // ms
+#define E4_MIN_DELAY_TIME 1.0   // ms
+#define E4_MAX_TAPS 8
+float effect04_time = 50.0;
+int effect04_taps = 3;
+float effect04_gain = 0.9;
+
+void T9PB_effect04_time(float t) {
+    if (t <= 0.0) {
+        effect04_time = E4_MIN_DELAY_TIME;
+    } else if (t >= E4_MAX_DELAY_TIME) {
+        effect04_time = E4_MAX_DELAY_TIME;
+    } else {
+        effect04_time = t;
+    }
+    effect04_update_params();
+}
+
+void T9PB_effect04_taps(float taps) {
+    int taps_l = (int)(taps + 0.5);
+    if (taps_l < 0) {
+        effect04_taps = 0;
+    } else if (taps_l > E4_MAX_TAPS) {
+        effect04_taps = E4_MAX_TAPS;
+    } else {
+        effect04_taps = taps_l;
+    }
+    effect04_update_params();
+}
+
+void T9PB_effect04_gain(float gain) {
+    if (gain < 0.0) {
+        effect04Mixer3.gain(1, 0.0);
+        effect04Mixer3.gain(2, 0.0);
+    } else if (gain > 1.0) {
+        effect04Mixer3.gain(1, 1.0);
+        effect04Mixer3.gain(2, 1.0);
+    } else {
+        effect04Mixer3.gain(1, gain);
+        effect04Mixer3.gain(2, gain);
+    }
+    effect04_gain = gain;
+}
+
+void effect04_update_params(void) {
+    // iterate through taps and apply delay time
+    int i;
+    for (i = 0; i < effect04_taps; i++) {
+        effect04Delay.delay(i, (float)(i+1)*effect04_time);
+    }
+    // disable unused taps
+    for (; i < 8; i++) {
+        effect04Delay.disable(i);
+    }
+}
+
+void T9PB_effect04_start(void) {
+    // restore previous tap/time values
+    effect04_update_params();
+    // set mixer gains
+    for (int i = 0; i < 8; i++) {
+        // decrease gain by 12.5% each delay tap
+        if (i < 4) {
+            effect04Mixer1.gain(i, 1.0 - (i+1)*0.111);
+        } else {
+            effect04Mixer2.gain(i-4, 1.0 - (i+1)*0.111);
+        }
+    }
+    effect04Mixer3.gain(1, effect04_gain);
+    effect04Mixer3.gain(2, effect04_gain);
+}
+
+void T9PB_effect04_stop(void) {
+    // disable all taps
+    for (int i = 0; i < 8; i++) {
+        effect04Delay.disable(i);
+    }
+}
+
 ///////////////////////////////////////
 // Effect objects
 // Each EffectClass object needs the following:
@@ -366,6 +468,13 @@ EffectClass effect03Tremolo_o(
     T9PB_effect03_start, nullFunc
 );
 
+// Effect 4: Delay
+EffectClass effect04Delay_o(
+    "Delay", "Time", "Taps", "Gain",
+    T9PB_effect04_time, T9PB_effect04_taps, T9PB_effect04_gain,
+    T9PB_effect04_start, T9PB_effect04_stop
+);
+
 
 ///////////////////////////////////////
 // Effect object pointer array
@@ -375,5 +484,6 @@ EffectClass* effectObjects_a[NUM_EFFECTS+1] = {
     &effect00Bypass_o,
     &effect01LPF_o,
     &effect02Freeverb_o,
-    &effect03Tremolo_o
+    &effect03Tremolo_o,
+    &effect04Delay_o
 };
