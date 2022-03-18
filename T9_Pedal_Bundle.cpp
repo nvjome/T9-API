@@ -413,9 +413,9 @@ void T9PB_effect04_start(void) {
     for (int i = 0; i < 8; i++) {
         // decrease gain by 12.5% each delay tap
         if (i < 4) {
-            effect04Mixer1.gain(i, 1.0 - i*0.125);
+            effect04Mixer1.gain(i, 1.0 - (i+1)*0.111);
         } else {
-            effect04Mixer2.gain(i-4, 1.0 - i*0.125);
+            effect04Mixer2.gain(i-4, 1.0 - (i+1)*0.111);
         }
     }
     effect04Mixer3.gain(0, 1.0);
