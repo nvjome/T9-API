@@ -356,6 +356,7 @@ void T9PB_effect03_start(void) {
 #define E4_MAX_TAPS 8
 float effect04_time = 50.0;
 int effect04_taps = 3;
+float effect04_gain = 0.9;
 
 void T9PB_effect04_time(float t) {
     if (t <= 0.0) {
@@ -391,7 +392,7 @@ void T9PB_effect04_gain(float gain) {
         effect04Mixer3.gain(1, gain);
         effect04Mixer3.gain(2, gain);
     }
-    
+    effect04_gain = gain;
 }
 
 void effect04_update_params(void) {
@@ -418,10 +419,8 @@ void T9PB_effect04_start(void) {
             effect04Mixer2.gain(i-4, 1.0 - (i+1)*0.111);
         }
     }
-    effect04Mixer3.gain(0, 1.0);
-    effect04Mixer3.gain(1, 0.8);
-    effect04Mixer3.gain(2, 0.8);
-    effect04Mixer3.gain(3, 0.0);
+    effect04Mixer3.gain(1, effect04_gain);
+    effect04Mixer3.gain(2, effect04_gain);
 }
 
 void T9PB_effect04_stop(void) {
