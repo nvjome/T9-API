@@ -349,7 +349,7 @@ void T9PB_effect03_start(void) {
 
 // Effect 4: Delay
 #define E4_MAX_DELAY_TIME 1000.0 // ms
-#define E4_MIN_DELAY_TIME 1.0   // ms
+#define E4_MIN_DELAY_TIME 0   // ms
 float effect04_time = 100.0;
 float effect04_gain = 0.5;
 
