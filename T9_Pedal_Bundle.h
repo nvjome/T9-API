@@ -60,10 +60,9 @@ void T9PB_effect03_start(void);
 
 // Effect 4: Delay
 void T9PB_effect04_time(float t);
-void T9PB_effect04_taps(float taps);
+void T9PB_effect04_gain(float gain);
 void T9PB_effect04_start(void);
 void T9PB_effect04_stop(void);
-void effect04_update_params(void);
 
 
 ///////////////////////////////////////
