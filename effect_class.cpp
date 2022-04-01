@@ -10,12 +10,12 @@ EffectClass::EffectClass(
     const std::string& p1Name,
     const std::string& p2Name,
     const std::string& p3Name,
+    int pNum,
     void (*modP1_fp)(float),
     void (*modP2_fp)(float),
     void (*modP3_fp)(float),
     void (*runStart_fp)(void),
-    void (*runStop_fp)(void))
-{
+    void (*runStop_fp)(void)) {
     // character arrays
     effectName = eName;
     param1Name = p1Name;
@@ -30,6 +30,8 @@ EffectClass::EffectClass(
     modParameter1_fp = modP1_fp;
     modParameter2_fp = modP2_fp;
     modParameter3_fp = modP3_fp;
+
+    numParams = pNum;
 }
 
 void EffectClass::modParameter1(float param) {
@@ -86,4 +88,8 @@ std::string EffectClass::getParameterName(int n) {
         return param3Name;
     else
         return "ERR";
+}
+
+int EffectClass::getParameterNum(void) {
+    return numParams;
 }

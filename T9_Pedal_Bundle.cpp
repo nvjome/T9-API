@@ -242,6 +242,14 @@ int T9PB_change_parameter(int effect, int param, float value) {
     return ret;
 }
 
+int T9PB_get_parameter_num(int effect) {
+    if (effect >= 0 && effect <= NUM_EFFECTS) {
+        return effectObjects_a[effect]->getParameterNum();
+    } else {
+        return 0;
+    }
+}
+
 
 ///////////////////////////////////////
 // Effect parameter functions
@@ -399,14 +407,14 @@ void T9PB_effect04_stop(void) {
 
 // Effect 0: Bypass
 EffectClass effect00Bypass_o(
-    "Bypass", "NA", "NA", "NA",
+    "Bypass", "NA", "NA", "NA", 0,
     nullFunc, nullFunc, nullFunc,
     nullFunc, nullFunc
 );
 
 // Effect 1: Low Pass Filter
 EffectClass effect01LPF_o(
-    "LPF", "Frequency", "NA", "NA",
+    "LPF", "Frequency", "NA", "NA", 1,
     T9PB_effect01_frequency, nullFunc, nullFunc,
     nullFunc, nullFunc
 
@@ -414,21 +422,21 @@ EffectClass effect01LPF_o(
 
 // Effect 2: Freeverb
 EffectClass effect02Freeverb_o(
-    "Freeverb", "Roomsize", "Damping", "Wet/Dry",
+    "Freeverb", "Roomsize", "Damping", "Wet/Dry", 3,
     T9PB_effect02_roomsize, T9PB_effect02_damping, T9PB_effect02_wetdry,
     T9PB_effect02_start, nullFunc
 );
 
 // Effect 3: Tremolo
 EffectClass effect03Tremolo_o(
-    "Tremelo", "Depth", "Rate", "NA",
+    "Tremelo", "Depth", "Rate", "NA", 2,
     T9PB_effect03_depth, T9PB_effect03_rate, nullFunc,
     T9PB_effect03_start, nullFunc
 );
 
 // Effect 4: Delay
 EffectClass effect04Delay_o(
-    "Delay", "Time", "Gain", "NA",
+    "Delay", "Time", "Gain", "NA", 2,
     T9PB_effect04_time, T9PB_effect04_gain, nullFunc,
     T9PB_effect04_start, T9PB_effect04_stop
 );
