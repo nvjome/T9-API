@@ -25,8 +25,8 @@
 ///////////////////////////////////////
 
 // System input objects:
-AudioInputUSB               lineIn;
-//AudioInputI2S               lineIn;
+//AudioInputUSB               lineIn;
+AudioInputI2S               lineIn;
 AudioAmplifier              preGain;
 AudioSwitch1To11            inputSwitch;
 
