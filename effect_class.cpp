@@ -11,6 +11,11 @@ EffectClass::EffectClass(
     const std::string& p2Name,
     const std::string& p3Name,
     int pNum,
+    float p1Min,
+    float p1Max,
+    float p2Min,
+    float p3Min,
+    float p3Max,
     void (*modP1_fp)(float),
     void (*modP2_fp)(float),
     void (*modP3_fp)(float),
@@ -32,6 +37,14 @@ EffectClass::EffectClass(
     modParameter3_fp = modP3_fp;
 
     numParams = pNum;
+
+    // parameters min/max
+    float param1Min = p1Min;
+    float param1Max = p1Max;
+    float param2Min = p2Min;
+    float param2Max = p2Max;
+    float param3Min = p3Min;
+    float param3Max = p3Max;
 }
 
 void EffectClass::modParameter1(float param) {
@@ -92,4 +105,26 @@ std::string EffectClass::getParameterName(int n) {
 
 int EffectClass::getParameterNum(void) {
     return numParams;
+}
+
+float EffectClass::getParameterMin(int param) {
+    if (param == 1)
+        return param1Min;
+    else if (param == 2)
+        return param2Min;
+    else if (param == 3)
+        return param3Min;
+    else
+        return 0.0;
+}
+
+float EffectClass::getParameterMax(int param) {
+    if (param == 1)
+        return param1Max;
+    else if (param == 2)
+        return param2Max;
+    else if (param == 3)
+        return param3Max;
+    else
+        return 0.0;
 }

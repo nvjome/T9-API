@@ -21,6 +21,12 @@ public:
         const std::string& p2Name,
         const std::string& p3Name,
         int pNum,
+        float p1Min,
+        float p1Max,
+        float p2Min,
+        float p2max,
+        float p3Min,
+        float p3Max,
         void (*modP1_fp)(float),
         void (*modP2_fp)(float),
         void (*modP3_fp)(float),
@@ -40,6 +46,9 @@ public:
 
     int getParameterNum(void);
 
+    float getParameterMin(int param);
+    float getParameterMax(int param);
+
 private:
     // basic info
     std::string effectName;
@@ -58,6 +67,14 @@ private:
 
     // number of parameters
     int numParams;
+
+    // parameters min/max
+    float param1Min;
+    float param1Max;
+    float param2Min;
+    float param2Max;
+    float param3Min;
+    float param3Max;
 };
 
 #endif

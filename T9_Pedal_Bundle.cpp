@@ -206,7 +206,7 @@ std::string T9PB_get_effect_name(int effect) {
     if (effect <= NUM_EFFECTS && effect >= 0) {
         return effectObjects_a[effect]->getEffectName();
     } else {
-        return "NA";
+        return "ERR";
     }
 }
 
@@ -224,10 +224,10 @@ std::string T9PB_get_parameter_name(int effect, int param) {
         if (param <= 3 && param > 0) {
             return effectObjects_a[effect]->getParameterName(param);
         } else {
-            return "NA";
+            return "ERR";
         }
     } else {
-        return "NA";
+        return "ERR";
     }
 }
 
@@ -250,6 +250,22 @@ int T9PB_get_parameter_num(int effect) {
     }
 }
 
+int T9PB_get_parameter_min(int effect, int param) {
+    if (effect >= 0 && effect <= NUM_EFFECTS) {
+        return effectObjects_a[effect]->getParameterMin();
+    } else {
+        return 0;
+    }
+}
+
+int T9PB_get_parameter_max(int effect, int param) {
+    if (effect >= 0 && effect <= NUM_EFFECTS) {
+        return effectObjects_a[effect]->getParameterMax();
+    } else {
+        return 0;
+    }
+}
+
 
 ///////////////////////////////////////
 // Effect parameter functions
@@ -261,6 +277,8 @@ void nullFunc(float n) {}
 void nullFunc(void) {}
 
 // Effect 1: Low Pass Filter
+#define E1_MIN_FREQ = 20.0
+#define E1_MAX_FREQ 15000.0
 void T9PB_effect01_frequency(float freq) {
     /*if (freq >= 20 && freq <= 15000) {
         effect01LPF.frequency(freq);
@@ -321,6 +339,7 @@ void T9PB_effect02_start(void) {
 // Effect 3: Tremolo
 float effect03_depth = 0.1;
 float effect03_rate = 5.0;
+#define E3_MAX_RATE 20.0
 void T9PB_effect03_depth(float dep) {
     if (dep <= 0.0) {
         effect03Dc.amplitude(1.0);
@@ -341,9 +360,9 @@ void T9PB_effect03_rate(float rate) {
     if (rate <= 0.0) {
         effect03Sine.frequency(0.0);
         effect03_rate = 0.0;
-    } else if (rate >= 20.0) {
-        effect03Sine.frequency(20.0);
-        effect03_rate = 20.0;
+    } else if (rate >= E3_MAX_RATE) {
+        effect03Sine.frequency(E3_MAX_RATE);
+        effect03_rate = E3_MAX_RATE;
     } else {
         effect03Sine.frequency(rate);
         effect03_rate = rate;
@@ -408,6 +427,7 @@ void T9PB_effect04_stop(void) {
 // Effect 0: Bypass
 EffectClass effect00Bypass_o(
     "Bypass", "NA", "NA", "NA", 0,
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
     nullFunc, nullFunc, nullFunc,
     nullFunc, nullFunc
 );
@@ -415,6 +435,7 @@ EffectClass effect00Bypass_o(
 // Effect 1: Low Pass Filter
 EffectClass effect01LPF_o(
     "LPF", "Frequency", "NA", "NA", 1,
+    E1_MIN_FREQ, E1_MAX_FREQ, 0.0, 0.0, 0.0, 0.0,
     T9PB_effect01_frequency, nullFunc, nullFunc,
     nullFunc, nullFunc
 
@@ -423,6 +444,7 @@ EffectClass effect01LPF_o(
 // Effect 2: Freeverb
 EffectClass effect02Freeverb_o(
     "Freeverb", "Roomsize", "Damping", "Wet/Dry", 3,
+    0.0, 1.0, 0.0, 1.0, 0.0, 1.0,
     T9PB_effect02_roomsize, T9PB_effect02_damping, T9PB_effect02_wetdry,
     T9PB_effect02_start, nullFunc
 );
@@ -430,6 +452,7 @@ EffectClass effect02Freeverb_o(
 // Effect 3: Tremolo
 EffectClass effect03Tremolo_o(
     "Tremelo", "Depth", "Rate", "NA", 2,
+    0.0, 1.0, 0.0, E3_MAX_RATE, 0.0, 0.0,
     T9PB_effect03_depth, T9PB_effect03_rate, nullFunc,
     T9PB_effect03_start, nullFunc
 );
@@ -437,6 +460,7 @@ EffectClass effect03Tremolo_o(
 // Effect 4: Delay
 EffectClass effect04Delay_o(
     "Delay", "Time", "Gain", "NA", 2,
+    E4_MIN_DELAY_TIME, E4_MAX_DELAY_TIME, 0.0, 1.0, 0.0, 0.0,
     T9PB_effect04_time, T9PB_effect04_gain, nullFunc,
     T9PB_effect04_start, T9PB_effect04_stop
 );

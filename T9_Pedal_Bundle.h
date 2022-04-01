@@ -34,6 +34,8 @@ std::string T9PB_get_effect_name(int effect);
 std::string T9PB_get_parameter_name(int effect, int param);
 int T9PB_change_parameter(int effect, int param, float value);
 int T9PB_get_parameter_num(int effect);
+int T9PB_get_parameter_min(int effect, int param);
+int T9PB_get_parameter_max(int effect, int param);
 
 
 ///////////////////////////////////////
