@@ -296,11 +296,27 @@ void T9PB_effect01_frequency(float freq) {
 // Effect 2: Freeverb
 float effect02_wet = 0.5;
 void T9PB_effect02_roomsize(float size) {
-    effect02Freeverb.roomsize(size);
+    //effect02Freeverb.roomsize(size);
+    // better handles out of bound input by clamping to the min/max
+    if (size <= 0.0) {
+        effect02Freeverb.roomsize(0.0);
+    } else if (size >= 1.0) {
+        effect02Freeverb.roomsize(1.0);
+    } else {
+        effect02Freeverb.roomsize(size);
+    }
 }
 
 void T9PB_effect02_damping(float damp) {
-    effect02Freeverb.damping(damp);
+    //effect02Freeverb.damping(damp);
+    // better handles out of bound input by clamping to the min/max
+    if (damp <= 0.0) {
+        effect02Freeverb.damping(0.0);
+    } else if (damp >= 1.0) {
+        effect02Freeverb.damping(1.0);
+    } else {
+        effect02Freeverb.damping(damp);
+    }
 }
 
 void T9PB_effect02_wetdry(float wet) {
