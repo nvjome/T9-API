@@ -11,14 +11,15 @@ EffectClass::EffectClass(
     const std::string& p2Name,
     const std::string& p3Name,
     int pNum,
-    float p1Min,
-    float p1Max,
-    float p2Min,
-    float p3Min,
-    float p3Max,
-    void (*modP1_fp)(float),
-    void (*modP2_fp)(float),
-    void (*modP3_fp)(float),
+    int p1Min,
+    int p1Max,
+    int p2Min,
+    int p2Max,
+    int p3Min,
+    int p3Max,
+    void (*modP1_fp)(int),
+    void (*modP2_fp)(int),
+    void (*modP3_fp)(int),
     void (*runStart_fp)(void),
     void (*runStop_fp)(void)) {
     // character arrays
@@ -39,30 +40,30 @@ EffectClass::EffectClass(
     numParams = pNum;
 
     // parameters min/max
-    float param1Min = p1Min;
-    float param1Max = p1Max;
-    float param2Min = p2Min;
-    float param2Max = p2Max;
-    float param3Min = p3Min;
-    float param3Max = p3Max;
+    param1Min = p1Min;
+    param1Max = p1Max;
+    param3Max = p3Max;
+    param2Min = p2Min;
+    param2Max = p2Max;
+    param3Min = p3Min;
 }
 
-void EffectClass::modParameter1(float param) {
+void EffectClass::modParameter1(int param) {
     // call function pointed to
     modParameter1_fp(param);
 }
 
-void EffectClass::modParameter2(float param) {
+void EffectClass::modParameter2(int param) {
     // call function pointed to
     modParameter2_fp(param);
 }
 
-void EffectClass::modParameter3(float param) {
+void EffectClass::modParameter3(int param) {
     // call function pointed to
     modParameter3_fp(param);
 }
 
-void EffectClass::modParameterN(int sel, float param) {
+void EffectClass::modParameterN(int sel, int param) {
     switch (sel) {
     case 1:
         modParameter1(param);
