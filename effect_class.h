@@ -21,22 +21,22 @@ public:
         const std::string& p2Name,
         const std::string& p3Name,
         int pNum,
-        float p1Min,
-        float p1Max,
-        float p2Min,
-        float p2max,
-        float p3Min,
-        float p3Max,
-        void (*modP1_fp)(float),
-        void (*modP2_fp)(float),
-        void (*modP3_fp)(float),
+        int p1Min,
+        int p1Max,
+        int p2Min,
+        int p2max,
+        int p3Min,
+        int p3Max,
+        void (*modP1_fp)(int),
+        void (*modP2_fp)(int),
+        void (*modP3_fp)(int),
         void (*runStart_fp)(void),
         void (*runStop_fp)(void));
     
-    void modParameter1(float param);
-    void modParameter2(float param);
-    void modParameter3(float param);
-    void modParameterN(int sel, float param);
+    void modParameter1(int param);
+    void modParameter2(int param);
+    void modParameter3(int param);
+    void modParameterN(int sel, int param);
 
     void runOnStart(void);
     void runOnStop(void);
@@ -61,20 +61,20 @@ private:
     void (*runOnStop_fp)(void);
 
     // parameter change function pointers
-    void (*modParameter1_fp)(float);
-    void (*modParameter2_fp)(float);
-    void (*modParameter3_fp)(float);
+    void (*modParameter1_fp)(int);
+    void (*modParameter2_fp)(int);
+    void (*modParameter3_fp)(int);
 
     // number of parameters
     int numParams;
 
     // parameters min/max
-    float param1Min;
-    float param1Max;
-    float param2Min;
-    float param2Max;
-    float param3Min;
-    float param3Max;
+    int param1Min;
+    int param1Max;
+    int param2Min;
+    int param2Max;
+    int param3Min;
+    int param3Max;
 };
 
 #endif
