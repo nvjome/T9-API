@@ -280,13 +280,10 @@ void nullFunc(void) {}
 #define E1_MIN_FREQ 20
 #define E1_MAX_FREQ 5000
 void T9PB_effect01_frequency(int freq) {
-    /*if (freq >= 20 && freq <= 15000) {
-        effect01LPF.frequency(freq);
-    }*/
     // better handles out of bound input by clamping to the min/max
-    if (freq <= 20.0) {
+    if (freq <= E1_MIN_FREQ) {
         effect01LPF.frequency((float)(E1_MIN_FREQ));
-    } else if (freq >= 15000.0) {
+    } else if (freq >= E1_MAX_FREQ) {
         effect01LPF.frequency((float)(E1_MAX_FREQ));
     } else {
         effect01LPF.frequency((float)freq);
