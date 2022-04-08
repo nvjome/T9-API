@@ -32,7 +32,7 @@ float T9PB_peak_detect(int source);
 int T9PB_change_effect(int curEffect, int newEffect);
 std::string T9PB_get_effect_name(int effect);
 std::string T9PB_get_parameter_name(int effect, int param);
-int T9PB_change_parameter(int effect, int param, float value);
+int T9PB_change_parameter(int effect, int param, int value);
 int T9PB_get_parameter_num(int effect);
 int T9PB_get_parameter_min(int effect, int param);
 int T9PB_get_parameter_max(int effect, int param);
@@ -48,22 +48,22 @@ void nullFunc(float n);
 void nullFunc(void);
 
 // Effect 1: Low Pass Filter
-void T9PB_effect01_frequency(float freq);
+void T9PB_effect01_frequency(int freq);
 
 // Effect 2: Freeverb
-void T9PB_effect02_roomsize(float size);
-void T9PB_effect02_damping(float damp);
-void T9PB_effect02_wetdry(float wet);
+void T9PB_effect02_roomsize(int size);
+void T9PB_effect02_damping(int damp);
+void T9PB_effect02_wetdry(int wet);
 void T9PB_effect02_start(void);
 
 // Effect 3: Tremolo
-void T9PB_effect03_depth(float dep);
-void T9PB_effect03_rate(float rate);
+void T9PB_effect03_depth(int dep);
+void T9PB_effect03_rate(int rate);
 void T9PB_effect03_start(void);
 
 // Effect 4: Delay
-void T9PB_effect04_time(float t);
-void T9PB_effect04_gain(float gain);
+void T9PB_effect04_time(int t);
+void T9PB_effect04_gain(int gain);
 void T9PB_effect04_start(void);
 void T9PB_effect04_stop(void);
 
