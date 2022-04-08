@@ -277,72 +277,66 @@ void nullFunc(float n) {}
 void nullFunc(void) {}
 
 // Effect 1: Low Pass Filter
-#define E1_MIN_FREQ 20.0
-#define E1_MAX_FREQ 15000.0
-void T9PB_effect01_frequency(float freq) {
+#define E1_MIN_FREQ 20
+#define E1_MAX_FREQ 5000
+void T9PB_effect01_frequency(int freq) {
     /*if (freq >= 20 && freq <= 15000) {
         effect01LPF.frequency(freq);
     }*/
     // better handles out of bound input by clamping to the min/max
     if (freq <= 20.0) {
-        effect01LPF.frequency(20.0);
+        effect01LPF.frequency((float)(E1_MIN_FREQ));
     } else if (freq >= 15000.0) {
-        effect01LPF.frequency(15000.0);
+        effect01LPF.frequency((float)(E1_MAX_FREQ));
     } else {
-        effect01LPF.frequency(freq);
+        effect01LPF.frequency((float)freq);
     }
 }
 
 // Effect 2: Freeverb
 float effect02_wet = 0.5;
-void T9PB_effect02_roomsize(float size) {
+void T9PB_effect02_roomsize(int size) {
     //effect02Freeverb.roomsize(size);
     // better handles out of bound input by clamping to the min/max
-    if (size <= 0.0) {
+    if (size <= 0) {
         effect02Freeverb.roomsize(0.0);
-    } else if (size >= 1.0) {
+    } else if (size >= 100) {
         effect02Freeverb.roomsize(1.0);
     } else {
-        effect02Freeverb.roomsize(size);
+        effect02Freeverb.roomsize((float)size/100.0);
     }
 }
 
-void T9PB_effect02_damping(float damp) {
+void T9PB_effect02_damping(int damp) {
     //effect02Freeverb.damping(damp);
     // better handles out of bound input by clamping to the min/max
-    if (damp <= 0.0) {
+    if (damp <= 0) {
         effect02Freeverb.damping(0.0);
-    } else if (damp >= 1.0) {
+    } else if (damp >= 100) {
         effect02Freeverb.damping(1.0);
     } else {
-        effect02Freeverb.damping(damp);
+        effect02Freeverb.damping((float)damp/100.0);
     }
 }
 
-void T9PB_effect02_wetdry(float wet) {
-    /*if (wet <= 1.0 && wet >= 0.0) {
-        // "dry" gain
-        effect02Mixer.gain(0,wet-1.0);
-        // "wet" gain
-        effect02Mixer.gain(1,wet);
-    }*/
-    // better handles out of bound input by clamping to the min/max
-    if (wet <= 0.0) {
+void T9PB_effect02_wetdry(int wet) {
+    if (wet <= 0) {
         // full dry
         effect02Mixer.gain(0,1.0);
         effect02Mixer.gain(1,0.0);
         effect02_wet = 0.0;
-    } else if (wet >= 1.0) {
+    } else if (wet >= 100) {
         // full wet
         effect02Mixer.gain(0,0.0);
         effect02Mixer.gain(0,1.0);
         effect02_wet = 1.0;
     } else {
+        float wet_f = (float)wet/100.0);
         // "dry" gain
-        effect02Mixer.gain(0,wet-1.0);
+        effect02Mixer.gain(0,wet_f-1.0);
         // "wet" gain
-        effect02Mixer.gain(1,wet);
-        effect02_wet = wet;
+        effect02Mixer.gain(1,wet_f);
+        effect02_wet = wet_f;
     }
 }
 
@@ -354,33 +348,34 @@ void T9PB_effect02_start(void) {
 
 // Effect 3: Tremolo
 float effect03_depth = 0.1;
-float effect03_rate = 5.0;
-#define E3_MAX_RATE 20.0
-void T9PB_effect03_depth(float dep) {
-    if (dep <= 0.0) {
+float effect03_rate = 5;
+#define E3_MAX_RATE 100
+void T9PB_effect03_depth(int dep) {
+    if (dep <= 0) {
         effect03Dc.amplitude(1.0);
         effect03Sine.amplitude(0);
         effect03_depth = 0.0;
-    } else if (dep >= 1.0) {
+    } else if (dep >= 100) {
         effect03Dc.amplitude(0);
         effect03Sine.amplitude(1.0);
         effect03_depth = 1.0;
     } else {
-        effect03Dc.amplitude(1.0 - dep);
-        effect03Sine.amplitude(dep);
-        effect03_depth = dep;
+        float dep_f = (float)dep/100.0;
+        effect03Dc.amplitude(1.0 - dep_f);
+        effect03Sine.amplitude(dep_f);
+        effect03_depth = dep_f;
     }
 }
 
-void T9PB_effect03_rate(float rate) {
-    if (rate <= 0.0) {
+void T9PB_effect03_rate(int rate) {
+    if (rate <= 0) {
         effect03Sine.frequency(0.0);
         effect03_rate = 0.0;
     } else if (rate >= E3_MAX_RATE) {
-        effect03Sine.frequency(E3_MAX_RATE);
+        effect03Sine.frequency((float)E3_MAX_RATE);
         effect03_rate = E3_MAX_RATE;
     } else {
-        effect03Sine.frequency(rate);
+        effect03Sine.frequency((float)rate);
         effect03_rate = rate;
     }
 }
@@ -391,12 +386,12 @@ void T9PB_effect03_start(void) {
 }
 
 // Effect 4: Delay
-#define E4_MAX_DELAY_TIME 1000.0 // ms
+#define E4_MAX_DELAY_TIME 1000 // ms
 #define E4_MIN_DELAY_TIME 0   // ms
 float effect04_time = 100.0;
 float effect04_gain = 0.5;
 
-void T9PB_effect04_time(float t) {
+void T9PB_effect04_time(int t) {
     if (t <= E4_MIN_DELAY_TIME) {
         effect04Delay.delay(0, E4_MIN_DELAY_TIME);
         effect04_time = E4_MIN_DELAY_TIME;
@@ -404,21 +399,23 @@ void T9PB_effect04_time(float t) {
         effect04Delay.delay(0, E4_MAX_DELAY_TIME);
         effect04_time = E4_MAX_DELAY_TIME;
     } else {
-        effect04Delay.delay(0, t);
-        effect04_time = t;
+        effect04Delay.delay(0, (float)t);
+        effect04_time = (float)t;
     }
 }
 
-void T9PB_effect04_gain(float gain) {
-    if (gain <= 0.0) {
+void T9PB_effect04_gain(int gain) {
+    if (gain <= 0) {
         effect04Amp.gain(0.0);
         effect04_gain = 0.0;
-    } else if (gain >= 1.0) {
+    } else if (gain >= 99) {
+        // limit gain somewhat at least
         effect04Amp.gain(0.99);
         effect04_gain = 0.99;
     } else {
-        effect04Amp.gain(gain);
-        effect04_gain = gain;
+        float gain_f = (float)gain/100.0
+        effect04Amp.gain(gain_f);
+        effect04_gain = gain_f;
     }
 }
 
