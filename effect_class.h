@@ -46,8 +46,8 @@ public:
 
     int getParameterNum(void);
 
-    float getParameterMin(int param);
-    float getParameterMax(int param);
+    int getParameterMin(int param);
+    int getParameterMax(int param);
 
 private:
     // basic info

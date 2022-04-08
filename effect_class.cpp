@@ -108,7 +108,7 @@ int EffectClass::getParameterNum(void) {
     return numParams;
 }
 
-float EffectClass::getParameterMin(int param) {
+int EffectClass::getParameterMin(int param) {
     if (param == 1)
         return param1Min;
     else if (param == 2)
@@ -116,10 +116,10 @@ float EffectClass::getParameterMin(int param) {
     else if (param == 3)
         return param3Min;
     else
-        return 0.0;
+        return 0;
 }
 
-float EffectClass::getParameterMax(int param) {
+int EffectClass::getParameterMax(int param) {
     if (param == 1)
         return param1Max;
     else if (param == 2)
@@ -127,5 +127,5 @@ float EffectClass::getParameterMax(int param) {
     else if (param == 3)
         return param3Max;
     else
-        return 0.0;
+        return 0;
 }

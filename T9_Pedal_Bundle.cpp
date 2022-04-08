@@ -252,7 +252,7 @@ int T9PB_get_parameter_num(int effect) {
 
 int T9PB_get_parameter_min(int effect, int param) {
     if (effect >= 0 && effect <= NUM_EFFECTS) {
-        return effectObjects_a[effect]->getParameterMin();
+        return effectObjects_a[effect]->getParameterMin(param);
     } else {
         return 0;
     }
@@ -260,7 +260,7 @@ int T9PB_get_parameter_min(int effect, int param) {
 
 int T9PB_get_parameter_max(int effect, int param) {
     if (effect >= 0 && effect <= NUM_EFFECTS) {
-        return effectObjects_a[effect]->getParameterMax();
+        return effectObjects_a[effect]->getParameterMax(param);
     } else {
         return 0;
     }
@@ -274,6 +274,7 @@ int T9PB_get_parameter_max(int effect, int param) {
 // Null function, used for empty parameters
 // Would ideally be optimized away, but not sure.
 void nullFunc(float n) {}
+void nullFunc(int n) {}
 void nullFunc(void) {}
 
 // Effect 1: Low Pass Filter
@@ -328,7 +329,7 @@ void T9PB_effect02_wetdry(int wet) {
         effect02Mixer.gain(0,1.0);
         effect02_wet = 1.0;
     } else {
-        float wet_f = (float)wet/100.0);
+        float wet_f = ((float)wet/100.0);
         // "dry" gain
         effect02Mixer.gain(0,wet_f-1.0);
         // "wet" gain
@@ -410,7 +411,7 @@ void T9PB_effect04_gain(int gain) {
         effect04Amp.gain(0.99);
         effect04_gain = 0.99;
     } else {
-        float gain_f = (float)gain/100.0
+        float gain_f = (float)gain/100.0;
         effect04Amp.gain(gain_f);
         effect04_gain = gain_f;
     }

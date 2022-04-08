@@ -45,6 +45,7 @@ int T9PB_get_parameter_max(int effect, int param);
 // Null functions, used for empty parameters
 // Would ideally be optimized away, but not sure.
 void nullFunc(float n);
+void nullFunc(int n);
 void nullFunc(void);
 
 // Effect 1: Low Pass Filter
