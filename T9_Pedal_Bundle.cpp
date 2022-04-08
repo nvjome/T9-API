@@ -440,7 +440,7 @@ void T9PB_effect04_stop(void) {
 // Effect 0: Bypass
 EffectClass effect00Bypass_o(
     "Bypass", "NA", "NA", "NA", 0,
-    0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+    0, 0, 0, 0, 0, 0,
     nullFunc, nullFunc, nullFunc,
     nullFunc, nullFunc
 );
@@ -448,7 +448,7 @@ EffectClass effect00Bypass_o(
 // Effect 1: Low Pass Filter
 EffectClass effect01LPF_o(
     "LPF", "Frequency", "NA", "NA", 1,
-    E1_MIN_FREQ, E1_MAX_FREQ, 0.0, 0.0, 0.0, 0.0,
+    E1_MIN_FREQ, E1_MAX_FREQ, 0, 0, 0, 0,
     T9PB_effect01_frequency, nullFunc, nullFunc,
     nullFunc, nullFunc
 
@@ -457,7 +457,7 @@ EffectClass effect01LPF_o(
 // Effect 2: Freeverb
 EffectClass effect02Freeverb_o(
     "Freeverb", "Roomsize", "Damping", "Wet/Dry", 3,
-    0.0, 1.0, 0.0, 1.0, 0.0, 1.0,
+    0, 100, 0, 100, 0, 100,
     T9PB_effect02_roomsize, T9PB_effect02_damping, T9PB_effect02_wetdry,
     T9PB_effect02_start, nullFunc
 );
@@ -465,7 +465,7 @@ EffectClass effect02Freeverb_o(
 // Effect 3: Tremolo
 EffectClass effect03Tremolo_o(
     "Tremelo", "Depth", "Rate", "NA", 2,
-    0.0, 1.0, 0.0, E3_MAX_RATE, 0.0, 0.0,
+    0, 100, 0, E3_MAX_RATE, 0, 0,
     T9PB_effect03_depth, T9PB_effect03_rate, nullFunc,
     T9PB_effect03_start, nullFunc
 );
@@ -473,7 +473,7 @@ EffectClass effect03Tremolo_o(
 // Effect 4: Delay
 EffectClass effect04Delay_o(
     "Delay", "Time", "Gain", "NA", 2,
-    E4_MIN_DELAY_TIME, E4_MAX_DELAY_TIME, 0.0, 1.0, 0.0, 0.0,
+    E4_MIN_DELAY_TIME, E4_MAX_DELAY_TIME, 0, 100, 0, 0,
     T9PB_effect04_time, T9PB_effect04_gain, nullFunc,
     T9PB_effect04_start, T9PB_effect04_stop
 );
