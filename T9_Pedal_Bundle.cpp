@@ -277,7 +277,7 @@ void nullFunc(float n) {}
 void nullFunc(void) {}
 
 // Effect 1: Low Pass Filter
-#define E1_MIN_FREQ = 20.0
+#define E1_MIN_FREQ 20.0
 #define E1_MAX_FREQ 15000.0
 void T9PB_effect01_frequency(float freq) {
     /*if (freq >= 20 && freq <= 15000) {
