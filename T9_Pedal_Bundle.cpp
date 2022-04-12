@@ -328,7 +328,7 @@ void T9PB_effect01_frequency(int freq) {
 }
 
 // Effect 2: Freeverb
-float effect02_wet = 0.5;
+int effect02_wet = 50;
 void T9PB_effect02_roomsize(int size) {
     //effect02Freeverb.roomsize(size);
     // better handles out of bound input by clamping to the min/max
@@ -358,30 +358,29 @@ void T9PB_effect02_wetdry(int wet) {
         // full dry
         effect02Mixer.gain(0,1.0);
         effect02Mixer.gain(1,0.0);
-        effect02_wet = 0.0;
+        effect02_wet = 0;
     } else if (wet >= 100) {
         // full wet
         effect02Mixer.gain(0,0.0);
         effect02Mixer.gain(0,1.0);
-        effect02_wet = 1.0;
+        effect02_wet = 100;
     } else {
         float wet_f = ((float)wet/100.0);
         // "dry" gain
         effect02Mixer.gain(0,wet_f-1.0);
         // "wet" gain
         effect02Mixer.gain(1,wet_f);
-        effect02_wet = wet_f;
+        effect02_wet = wet;
     }
 }
 
 void T9PB_effect02_start(void) {
     // default gain values
-    effect02Mixer.gain(0, 1.0-effect02_wet);
-    effect02Mixer.gain(1, effect02_wet);
+    T9PB_effect02_wetdry(effect02_wet);
 }
 
 // Effect 3: Tremolo
-float effect03_depth = 0.1;
+float effect03_depth = 10;
 float effect03_rate = 5;
 #define E3_MAX_RATE 100
 void T9PB_effect03_depth(int dep) {
@@ -397,7 +396,7 @@ void T9PB_effect03_depth(int dep) {
         float dep_f = (float)dep/100.0;
         effect03Dc.amplitude(1.0 - dep_f);
         effect03Sine.amplitude(dep_f);
-        effect03_depth = dep_f;
+        effect03_depth = dep;
     }
 }
 
@@ -423,7 +422,7 @@ void T9PB_effect03_start(void) {
 #define E4_MAX_DELAY_TIME 1000 // ms
 #define E4_MIN_DELAY_TIME 0   // ms
 float effect04_time = 100.0;
-float effect04_gain = 0.5;
+float effect04_gain = 50;
 
 void T9PB_effect04_time(int t) {
     if (t <= E4_MIN_DELAY_TIME) {
@@ -449,7 +448,7 @@ void T9PB_effect04_gain(int gain) {
     } else {
         float gain_f = (float)gain/100.0;
         effect04Amp.gain(gain_f);
-        effect04_gain = gain_f;
+        effect04_gain = gain;
     }
 }
 
