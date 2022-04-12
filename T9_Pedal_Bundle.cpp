@@ -231,7 +231,16 @@ std::string T9PB_get_parameter_name(int effect, int param) {
     }
 }
 
-int T9PB_change_parameter(int effect, int param, float value) {
+/*
+    T9PB_change_parameter
+    Change a specified parameter.
+    Arguments:
+        effect: Effect index, 0 to NUM_EFFECTS.
+        param: Parameter index, 1 to 3.
+    Returns:
+        Parameter name as string.
+*/
+int T9PB_change_parameter(int effect, int param, int value) {
     int ret = -1;
     if (effect <= NUM_EFFECTS && effect >= 0) {
         if (param <= 3 && param > 0) {
