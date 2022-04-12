@@ -237,8 +237,9 @@ std::string T9PB_get_parameter_name(int effect, int param) {
     Arguments:
         effect: Effect index, 0 to NUM_EFFECTS.
         param: Parameter index, 1 to 3.
+        value: New parameter value.
     Returns:
-        Parameter name as string.
+        0 if success, -1 for effect number or parameter number bounds error.
 */
 int T9PB_change_parameter(int effect, int param, int value) {
     int ret = -1;
@@ -251,6 +252,14 @@ int T9PB_change_parameter(int effect, int param, int value) {
     return ret;
 }
 
+/*
+    T9PB_get_parameter_num
+    Getter function for the number of valid aprameters for a given effect.
+    Arguments:
+        effect: Effect index, 0 to NUM_EFFECTS.
+    Returns:
+        Numer of parameters for the specified effect.
+*/
 int T9PB_get_parameter_num(int effect) {
     if (effect >= 0 && effect <= NUM_EFFECTS) {
         return effectObjects_a[effect]->getParameterNum();
