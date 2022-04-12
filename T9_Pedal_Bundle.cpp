@@ -258,7 +258,7 @@ int T9PB_change_parameter(int effect, int param, int value) {
     Arguments:
         effect: Effect index, 0 to NUM_EFFECTS.
     Returns:
-        Numer of parameters for the specified effect.
+        Number of parameters for the specified effect.
 */
 int T9PB_get_parameter_num(int effect) {
     if (effect >= 0 && effect <= NUM_EFFECTS) {
@@ -268,6 +268,15 @@ int T9PB_get_parameter_num(int effect) {
     }
 }
 
+/*
+    T9PB_get_parameter_min
+    Getter function for the minimum parameter value for a given parameter and effect.
+    Arguments:
+        effect: Effect index, 0 to NUM_EFFECTS.
+        param: Parameter index, 1 to 3.
+    Returns:
+        Minimum parameter value.
+*/
 int T9PB_get_parameter_min(int effect, int param) {
     if (effect >= 0 && effect <= NUM_EFFECTS) {
         return effectObjects_a[effect]->getParameterMin(param);
@@ -276,6 +285,15 @@ int T9PB_get_parameter_min(int effect, int param) {
     }
 }
 
+/*
+    T9PB_get_parameter_max
+    Getter function for the maximum parameter value for a given parameter and effect.
+    Arguments:
+        effect: Effect index, 0 to NUM_EFFECTS.
+        param: Parameter index, 1 to 3.
+    Returns:
+        Maximum parameter value.
+*/
 int T9PB_get_parameter_max(int effect, int param) {
     if (effect >= 0 && effect <= NUM_EFFECTS) {
         return effectObjects_a[effect]->getParameterMax(param);
