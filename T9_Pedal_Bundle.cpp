@@ -380,8 +380,8 @@ void T9PB_effect02_start(void) {
 }
 
 // Effect 3: Tremolo
-float effect03_depth = 10;
-float effect03_rate = 5;
+int effect03_depth = 10;
+int effect03_rate = 5;
 #define E3_MAX_RATE 100
 void T9PB_effect03_depth(int dep) {
     if (dep <= 0) {
@@ -422,7 +422,7 @@ void T9PB_effect03_start(void) {
 #define E4_MAX_DELAY_TIME 1000 // ms
 #define E4_MIN_DELAY_TIME 0   // ms
 float effect04_time = 100.0;
-float effect04_gain = 50;
+int effect04_gain = 50;
 
 void T9PB_effect04_time(int t) {
     if (t <= E4_MIN_DELAY_TIME) {
