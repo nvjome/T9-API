@@ -52,6 +52,9 @@ AudioMixer4                 effect04Mixer;
 AudioEffectDelay            effect04Delay;
 AudioAmplifier              effect04Amp;
 
+// Effect 5: Saturation
+AudioEffectSoftclip         effect05Softclip;
+
 // System output objects:
 AudioAmplifier              postGain;
 AudioMux11To1               outputMux;
@@ -119,6 +122,10 @@ AudioConnection             effect04Sub01(effect04Mixer, 0, effect04Amp, 0);
 AudioConnection             effect04Sub02(effect04Amp, 0, effect04Delay, 0);
 AudioConnection             effect04Sub03(effect04Delay, 0, effect04Mixer, 1);
 AudioConnection             effect04Output(effect04Mixer, 0, outputMux, 4);
+
+// Effect 5: Saturation
+AudioConnection             effect05Input(inputSwitch, 5, effect05Softclip, 0);
+AudioConnection             effect05Output(effect05Softclip, 0, outputMux, 5);
 
 /*
     T9PB_begin
@@ -461,6 +468,20 @@ void T9PB_effect04_stop(void) {
     effect04Delay.disable(0);
 }
 
+// Effect 5: Saturation
+#define E5_MIN_INTENSITY 0
+#define E5_MAX_INTENSITY 1
+
+void T9PB_effect05_intensity(int intense) {
+    if (intense <= E5_MIN_INTENSITY) {
+        effect05Softclip.intensity(0.0);
+    } else if (intense >= E5_MAX_INTENSITY) {
+        effect05Softclip.intensity((float)E5_MAX_INTENSITY/100.0f);
+    } else {
+        effect05Softclip.intensity((float)intense/100.0f);
+    }
+}
+
 ///////////////////////////////////////
 // Effect objects
 // Each EffectClass object needs the following:
@@ -509,6 +530,14 @@ EffectClass effect04Delay_o(
     E4_MIN_DELAY_TIME, E4_MAX_DELAY_TIME, 0, 100, 0, 0,
     T9PB_effect04_time, T9PB_effect04_gain, nullFunc,
     T9PB_effect04_start, T9PB_effect04_stop
+);
+
+// Effect 5: Saturation
+EffectClass effect05Saturation_o(
+    "Saturation", "Intensity", "NA", "NA", 1,
+    E5_MIN_INTENSITY, E5_MAX_INTENSITY, 0, 0, 0, 0,
+    T9PB_effect05_intensity, nullFunc, nullFunc,
+    nullFunc, nullFunc
 );
 
 

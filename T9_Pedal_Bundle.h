@@ -69,6 +69,9 @@ void T9PB_effect04_gain(int gain);
 void T9PB_effect04_start(void);
 void T9PB_effect04_stop(void);
 
+// Effect 5: Saturation
+void T9PB_effect05_intensity(int intense);
+
 
 ///////////////////////////////////////
 // Effect object pointer array

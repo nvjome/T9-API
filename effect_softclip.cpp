@@ -5,7 +5,7 @@
 #include "Arduino.h"
 #include "effect_softclip.h"
 
-#define ONE_THIRD 0.33333333
+#define ONE_THIRD (0.333333f)
 
 /*
     update()
@@ -23,7 +23,7 @@ void AudioEffectSoftclip::update(void) {
         int sample = *point;
 
         // non-optimized cubic function
-        sample = sample - saturate * ONE_THIRD * sample*sample*sample;
+        sample = sample - intense * ONE_THIRD * sample*sample*sample;
 
         *point = sample;
     }
@@ -34,12 +34,12 @@ void AudioEffectSoftclip::update(void) {
     return;
 }
 
-void AudioEffectSoftclip::saturation(float sat) {
-    if (sat < 0.0f) {
-        saturate = 0.0f;
-    } else if (sat > 1.0f) {
-        saturate = 1.0f;
+void AudioEffectSoftclip::intensity(float ints) {
+    if (ints < 0.0f) {
+        intense = 0.0f;
+    } else if (ints > 1.0) {
+        intense = 1.0;
     } else {
-        saturate = sat;
+        intense = ints;
     }
 }

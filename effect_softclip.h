@@ -15,10 +15,10 @@ class AudioEffectSoftclip : public AudioStream
 public:
     AudioEffectSoftclip() : AudioStream(1, inputQueueArray) {};
     virtual void update(void);
-    void saturation(float sat);
+    void intensity(float ints);
 private:
     audio_block_t *inputQueueArray[1];
-    float saturate = 1.0;
+    float intense = 1.0;
 };
 
 #endif
