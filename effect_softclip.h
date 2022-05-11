@@ -18,7 +18,7 @@ public:
     void saturation(float sat);
 private:
     audio_block_t *inputQueueArray[1];
-    float saturation = 1.0;
+    float saturate = 1.0;
 };
 
 #endif

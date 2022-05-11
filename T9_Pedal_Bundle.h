@@ -22,6 +22,7 @@
 #include "switch_1_to_11.h"
 #include "mux_11_to_1.h"
 #include "effect_class.h"
+#include "effect_softclip.h"
 
 // Number of implemented effects, excluding bypass effect 0
 #define NUM_EFFECTS 4

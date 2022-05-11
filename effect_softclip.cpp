@@ -23,7 +23,7 @@ void AudioEffectSoftclip::update(void) {
         int sample = *point;
 
         // non-optimized cubic function
-        //sample = sample - saturation * ONE_THIRD * sample*sample*sample;
+        sample = sample - saturate * ONE_THIRD * sample*sample*sample;
 
         *point = sample;
     }
@@ -36,10 +36,10 @@ void AudioEffectSoftclip::update(void) {
 
 void AudioEffectSoftclip::saturation(float sat) {
     if (sat < 0.0f) {
-        saturation = 0.0f;
+        saturate = 0.0f;
     } else if (sat > 1.0f) {
-        saturation = 1.0f;
+        saturate = 1.0f;
     } else {
-        saturation = sat;
+        saturate = sat;
     }
 }
