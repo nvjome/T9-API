@@ -470,7 +470,7 @@ void T9PB_effect04_stop(void) {
 
 // Effect 5: Saturation
 #define E5_MIN_INTENSITY 0
-#define E5_MAX_INTENSITY 1
+#define E5_MAX_INTENSITY 100
 
 void T9PB_effect05_intensity(int intense) {
     if (intense <= E5_MIN_INTENSITY) {
