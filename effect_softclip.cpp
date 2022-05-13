@@ -20,6 +20,7 @@ void AudioEffectSoftclip::update(void) {
     int16_t *point = block->data;
     int16_t *end = block->data + AUDIO_BLOCK_SAMPLES;
 
+    /*
     for(; point < end; point++) {
         int sample = *point;
         float temp = 0.0;
@@ -28,6 +29,15 @@ void AudioEffectSoftclip::update(void) {
         temp = temp - intense * ONE_THIRD * temp*temp*temp;
 
         *point = (int16_t)(temp*MAX_VAL_INT16);
+    }
+    */
+
+    for(; point < end; point++) {
+        if (*point > intense*MAX_VAL_INT16)) {
+            *point = intense*MAX_VAL_INT16;
+        } else if (*point < -intense*MAX_VAL_INT16) {
+            *point = -intense*MAX_VAL_INT16;
+        }
     }
 
     transmit(block);
