@@ -482,6 +482,14 @@ void T9PB_effect05_intensity(int intense) {
     }
 }
 
+void T9PB_effect05_pregain(int gain) {
+    effect05Softclip.pregain((float)gain/100.f);
+}
+
+void T9PB_effect05_postgain(int gain) {
+    effect05Softclip.postgain((float)gain/100.f);
+}
+
 ///////////////////////////////////////
 // Effect objects
 // Each EffectClass object needs the following:
@@ -533,9 +541,9 @@ EffectClass effect04Delay_o(
 
 // Effect 5: Saturation
 EffectClass effect05Saturation_o(
-    "Saturation", "Intensity", "NA", "NA", 1,
-    E5_MIN_INTENSITY, E5_MAX_INTENSITY, 0, 0, 0, 0,
-    T9PB_effect05_intensity, nullFunc, nullFunc,
+    "Saturation", "Intensity", "Pregain", "Postgain", 3,
+    E5_MIN_INTENSITY, E5_MAX_INTENSITY, 100, 500, 100, 500,
+    T9PB_effect05_intensity, T9PB_effect05_pregain, T9PB_effect05_postgain,
     nullFunc, nullFunc
 );
 

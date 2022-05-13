@@ -20,18 +20,17 @@ void AudioEffectSoftclip::update(void) {
     int16_t *point = block->data;
     int16_t *end = block->data + AUDIO_BLOCK_SAMPLES;
 
-    /*
     for(; point < end; point++) {
         int sample = *point;
         float temp = 0.0;
         // non-optimized cubic function
-        temp = (float)sample / MAX_VAL_INT16;
+        temp = preK*((float)sample / MAX_VAL_INT16);
         temp = temp - intense * ONE_THIRD * temp*temp*temp;
 
-        *point = (int16_t)(temp*MAX_VAL_INT16);
+        *point = postK*((int16_t)(temp*MAX_VAL_INT16));
     }
-    */
 
+    /*
     for(; point < end; point++) {
         if (*point > intense*MAX_VAL_INT16) {
             *point = intense*MAX_VAL_INT16;
@@ -39,6 +38,7 @@ void AudioEffectSoftclip::update(void) {
             *point = -intense*MAX_VAL_INT16;
         }
     }
+    */
 
     transmit(block);
     release(block);
@@ -54,4 +54,12 @@ void AudioEffectSoftclip::intensity(float ints) {
     } else {
         intense = ints;
     }
+}
+
+void AudioEffectSoftclip::pregain(float gain) {
+    preK = gain;
+}
+
+void AudioEffectSoftclip::postgain(float gain) {
+    postK = gain;
 }
