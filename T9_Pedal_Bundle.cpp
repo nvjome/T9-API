@@ -470,7 +470,7 @@ void T9PB_effect04_stop(void) {
 
 // Effect 5: Saturation
 #define E5_MIN_INTENSITY 0
-#define E5_MAX_INTENSITY 100
+#define E5_MAX_INTENSITY 300
 
 void T9PB_effect05_intensity(int intense) {
     if (intense <= E5_MIN_INTENSITY) {
@@ -505,7 +505,6 @@ EffectClass effect01LPF_o(
     E1_MIN_FREQ, E1_MAX_FREQ, 0, 0, 0, 0,
     T9PB_effect01_frequency, nullFunc, nullFunc,
     nullFunc, nullFunc
-
 );
 
 // Effect 2: Freeverb
