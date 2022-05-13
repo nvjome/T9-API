@@ -25,7 +25,7 @@
 #include "effect_softclip.h"
 
 // Number of implemented effects, excluding bypass effect 0
-#define NUM_EFFECTS 4
+#define NUM_EFFECTS 5
 
 void T9PB_begin(void);
 void T9PB_hp_volume(float volume);
