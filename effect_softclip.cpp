@@ -33,7 +33,7 @@ void AudioEffectSoftclip::update(void) {
     */
 
     for(; point < end; point++) {
-        if (*point > intense*MAX_VAL_INT16)) {
+        if (*point > intense*MAX_VAL_INT16) {
             *point = intense*MAX_VAL_INT16;
         } else if (*point < -intense*MAX_VAL_INT16) {
             *point = -intense*MAX_VAL_INT16;
