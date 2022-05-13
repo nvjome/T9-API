@@ -187,7 +187,7 @@ float T9PB_peak_detect(int source) {
 */
 int T9PB_change_effect(int curEffect, int newEffect) {
     int ret = -1;
-    if (newEffect >= 0 && newEffect <= NUM_EFFECTS) {
+    if ((newEffect >= 0) && (newEffect <= NUM_EFFECTS)) {
         // run on stop function
         effectObjects_a[curEffect]->runOnStop();
         // switch output
