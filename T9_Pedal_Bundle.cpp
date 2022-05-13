@@ -550,5 +550,6 @@ EffectClass* effectObjects_a[NUM_EFFECTS+1] = {
     &effect01LPF_o,
     &effect02Freeverb_o,
     &effect03Tremolo_o,
-    &effect04Delay_o
+    &effect04Delay_o,
+    &effect05Saturation_o
 };
