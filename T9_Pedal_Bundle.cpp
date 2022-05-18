@@ -474,7 +474,7 @@ void T9PB_effect04_stop(void) {
 
 // Effect 5: Saturation
 #define E5_MIN_INTENSITY 0
-#define E5_MAX_INTENSITY 100
+#define E5_MAX_INTENSITY 300
 #define E5_MIN_PREGAIN 100
 #define E5_MAX_PREGAIN 500
 #define E5_MIN_POSTGAIN 0

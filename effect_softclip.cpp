@@ -49,17 +49,9 @@ void AudioEffectSoftclip::update(void) {
 void AudioEffectSoftclip::intensity(float ints) {
     if (ints < 0.0f) {
         intense = 0.0f;
-    } else if (ints > 1.0f) {
-        intense = 1.0f;
+    } else if (ints > 3.0f) {
+        intense = 3.0f;
     } else {
         intense = ints;
     }
-}
-
-void AudioEffectSoftclip::pregain(float gain) {
-    preK = gain;
-}
-
-void AudioEffectSoftclip::postgain(float gain) {
-    postK = gain;
 }
