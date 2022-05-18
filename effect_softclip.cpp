@@ -6,7 +6,7 @@
 #include "effect_softclip.h"
 
 #define ONE_THIRD (0.333333f)
-#define MAX_VAL_INT16 (32767.0f)
+#define MAX_VAL_INT16 (32767)
 
 /*
     update()
@@ -24,10 +24,10 @@ void AudioEffectSoftclip::update(void) {
         int sample = *point;
         float temp = 0.0;
         // non-optimized cubic function
-        temp = preK*((float)sample / MAX_VAL_INT16);
+        temp = (float)sample / (float)MAX_VAL_INT16;
         temp = temp - intense * ONE_THIRD * temp*temp*temp;
 
-        *point = postK*((int16_t)(temp*MAX_VAL_INT16));
+        *point = (int16_t)(temp*(float)MAX_VAL_INT16);
     }
 
     /*
