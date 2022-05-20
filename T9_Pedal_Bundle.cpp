@@ -52,6 +52,11 @@ AudioMixer4                 effect04Mixer;
 AudioEffectDelay            effect04Delay;
 AudioAmplifier              effect04Amp;
 
+// Effect 5: Saturation
+AudioAmplifier              effect05PreGain;
+AudioEffectSoftclip         effect05Softclip;
+AudioAmplifier              effect05PostGain;
+
 // System output objects:
 AudioAmplifier              postGain;
 AudioMux11To1               outputMux;
@@ -120,6 +125,12 @@ AudioConnection             effect04Sub02(effect04Amp, 0, effect04Delay, 0);
 AudioConnection             effect04Sub03(effect04Delay, 0, effect04Mixer, 1);
 AudioConnection             effect04Output(effect04Mixer, 0, outputMux, 4);
 
+// Effect 5: Saturation
+AudioConnection             effect05Input(inputSwitch, 5, effect05PreGain, 0);
+AudioConnection             effect05Sub01(effect05PreGain, 0, effect05Softclip, 0);
+AudioConnection             effect05Sub02(effect05Softclip, 0, effect05PostGain, 0);
+AudioConnection             effect05Output(effect05PostGain, 0, outputMux, 5);
+
 /*
     T9PB_begin
     Initializes the Teensy Audio library and settings.
@@ -140,7 +151,7 @@ void T9PB_begin(void) {
     sgtl5000.volume(0.3);
 
     preGain.gain(1.0);
-    postGain.gain(1.0);
+    postGain.gain(-1.0);
 }
 
 void T9PB_hp_volume(float volume) {
@@ -180,7 +191,7 @@ float T9PB_peak_detect(int source) {
 */
 int T9PB_change_effect(int curEffect, int newEffect) {
     int ret = -1;
-    if (newEffect >= 0 && newEffect <= NUM_EFFECTS) {
+    if ((newEffect >= 0) && (newEffect <= NUM_EFFECTS)) {
         // run on stop function
         effectObjects_a[curEffect]->runOnStop();
         // switch output
@@ -461,6 +472,44 @@ void T9PB_effect04_stop(void) {
     effect04Delay.disable(0);
 }
 
+// Effect 5: Saturation
+#define E5_MIN_INTENSITY 0
+#define E5_MAX_INTENSITY 300
+#define E5_MIN_PREGAIN 100
+#define E5_MAX_PREGAIN 500
+#define E5_MIN_POSTGAIN 0
+#define E5_MAX_POSTGAIN 100
+
+void T9PB_effect05_intensity(int intense) {
+    if (intense <= E5_MIN_INTENSITY) {
+        effect05Softclip.intensity(0.0);
+    } else if (intense >= E5_MAX_INTENSITY) {
+        effect05Softclip.intensity((float)E5_MAX_INTENSITY/100.0f);
+    } else {
+        effect05Softclip.intensity((float)intense/100.0f);
+    }
+}
+
+void T9PB_effect05_pregain(int gain) {
+    if (gain < E5_MIN_PREGAIN) {
+        effect05PreGain.gain((float)E5_MIN_PREGAIN/100.f);
+    } else if (gain > E5_MAX_PREGAIN) {
+        effect05PreGain.gain((float)E5_MAX_PREGAIN/100.f);
+    } else {
+        effect05PreGain.gain((float)gain/100.f);
+    }
+}
+
+void T9PB_effect05_postgain(int gain) {
+    if (gain < E5_MIN_POSTGAIN) {
+        effect05PostGain.gain((float)E5_MIN_POSTGAIN/100.f);
+    } else if (gain > E5_MAX_POSTGAIN) {
+        effect05PostGain.gain((float)E5_MAX_POSTGAIN/100.f);
+    } else {
+        effect05PostGain.gain((float)gain/100.f);
+    }
+}
+
 ///////////////////////////////////////
 // Effect objects
 // Each EffectClass object needs the following:
@@ -484,7 +533,6 @@ EffectClass effect01LPF_o(
     E1_MIN_FREQ, E1_MAX_FREQ, 0, 0, 0, 0,
     T9PB_effect01_frequency, nullFunc, nullFunc,
     nullFunc, nullFunc
-
 );
 
 // Effect 2: Freeverb
@@ -511,6 +559,14 @@ EffectClass effect04Delay_o(
     T9PB_effect04_start, T9PB_effect04_stop
 );
 
+// Effect 5: Saturation
+EffectClass effect05Saturation_o(
+    "Saturation", "Intensity", "Pregain", "Postgain", 3,
+    E5_MIN_INTENSITY, E5_MAX_INTENSITY, E5_MIN_PREGAIN, E5_MAX_PREGAIN, E5_MIN_POSTGAIN, E5_MAX_POSTGAIN,
+    T9PB_effect05_intensity, T9PB_effect05_pregain, T9PB_effect05_postgain,
+    nullFunc, nullFunc
+);
+
 
 ///////////////////////////////////////
 // Effect object pointer array
@@ -521,5 +577,6 @@ EffectClass* effectObjects_a[NUM_EFFECTS+1] = {
     &effect01LPF_o,
     &effect02Freeverb_o,
     &effect03Tremolo_o,
-    &effect04Delay_o
+    &effect04Delay_o,
+    &effect05Saturation_o
 };

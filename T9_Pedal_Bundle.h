@@ -22,9 +22,10 @@
 #include "switch_1_to_11.h"
 #include "mux_11_to_1.h"
 #include "effect_class.h"
+#include "effect_softclip.h"
 
 // Number of implemented effects, excluding bypass effect 0
-#define NUM_EFFECTS 4
+#define NUM_EFFECTS 5
 
 void T9PB_begin(void);
 void T9PB_hp_volume(float volume);
@@ -67,6 +68,11 @@ void T9PB_effect04_time(int t);
 void T9PB_effect04_gain(int gain);
 void T9PB_effect04_start(void);
 void T9PB_effect04_stop(void);
+
+// Effect 5: Saturation
+void T9PB_effect05_intensity(int intense);
+void T9PB_effect05_pregain(int gain);
+void T9PB_effect05_postgain(int gain);
 
 
 ///////////////////////////////////////
